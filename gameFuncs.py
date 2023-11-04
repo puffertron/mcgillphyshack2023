@@ -1,6 +1,7 @@
 import pygame as pg
+from pygame import Vector2
 import bodies
-import missile
+from missile import Missile
 from state import State
 
 class GameFuncs():
@@ -13,11 +14,17 @@ class GameFuncs():
     def movePlanet(cls):
         """Called when in Moving Planets Mode"""
         if not cls.chosenPlanet:
-            #Check if clicking on planet
+            #Check if starting to move planet
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
                 
-                for planet in State.planets:
+                if State.currentPlayer == 0:
+                    playersPlanets = State.p0Planets
+                elif State.currentPlayer == 1:
+                    playersPlanets = State.p1Planets
+
+                for planet in playersPlanets:
+                    #For each planet, see if clicking on planet
                     positionInMask = mousepos.x - planet.rect.x, mousepos.y - planet.rect.y
                     if planet.rect.collidepoint(mousepos) and planet.mask.get_at(positionInMask):
                         cls.chosenPlanet = planet
@@ -30,20 +37,6 @@ class GameFuncs():
             #Move planet
             cls.chosenPlanet.rect.x = mousepos.x + cls.clickDifference[0]
             cls.chosenPlanet.rect.y = mousepos.y + cls.clickDifference[1]
-
-
-            # #drag n drop
-            # mousepos = pg.Vector2(mouse.get_pos())
-            # if mouse.get_pressed()[0]:
-            #     if cls.chosenPlanet.rect.collidepoint(mousepos):
-            #         #clicked!!
-            #         cls.chosenPlanet.picked = True
-            # else:
-            #     cls.chosenPlanet.picked = False
-            
-            # if cls.chosenPlanet.picked:
-            #     cls.chosenPlanet.rect.x = mousepos.x - cls.chosenPlanet.rect.width/2
-            #     cls.chosenPlanet.rect.y = mousepos.y - cls.chosenPlanet.rect.height/2
             
             #collision
             resolution = pg.Vector2()
@@ -57,30 +50,23 @@ class GameFuncs():
             cls.chosenPlanet.rect.x += resolution.x
             cls.chosenPlanet.rect.y += resolution.y
 
+            #Let go of mouse
             if not pg.mouse.get_pressed()[0]:
                 cls.chosenPlanet = None
                 # TODO update state mode
 
-    missile_: missile.Missile = None
+    missile: Missile = None
     @classmethod
-    def shootMissile(cls):
+    def missileLaunched(cls):
         """Called when in Shooting mode"""
 
         # Define our Missile and group it
-        if cls.missile_ == None:
-            cls.missile_ = missile.Missile()
-            State.missleGroup.add(cls.missile_)
-
-        # Determine acceleration based on position
-        cls.missile_.a = cls.missile_.acceleleration(State.planets)
-
-        # Increment velocity based on a
-        cls.missile_.v += cls.missile_.a
-
-        # Increment position based on velocity
-        cls.missile_.oldX.append(cls.missile_.oldX[-1] + cls.missile_.v)
-        cls.missile_.rect.center = cls.missile_.oldX[-1]
-
-        # Only keep MaxLen old positions
-        if len(cls.missile_.oldX) > cls.missile_.oldXMaxLen:
-            cls.missile_.oldX.pop(1)
+        if cls.missile == None:
+            cls.missile = Missile(Vector2(), Vector2())
+            if State.currentPlayer == 0:
+                State.addToP0Group(cls.missile)
+            elif State.currentPlayer == 1:
+                State.addToP1Group(cls.missile)
+                
+        # Update the position of the missile
+        cls.missile.updateKinematics(State.planets)
