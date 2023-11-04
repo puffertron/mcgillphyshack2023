@@ -5,12 +5,13 @@ import random
 import uuid
 
 class Planet(pg.sprite.Sprite):
-    def __init__(self, radius, mass, color):
+    def __init__(self, radius, mass, color, owner:int):
         pg.sprite.Sprite.__init__(self)
 
         self.radius = radius
         self.mass = mass
         self.color = color
+        self.owner = owner
 
         self.image = pg.Surface((self.radius*2, self.radius*2))
         self.rect = self.image.get_rect()
