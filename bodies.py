@@ -49,15 +49,17 @@ class Planet(pygame.sprite.Sprite):
         #drag n drop
         mousepos = Vector2(mouse.get_pos())
         if mouse.get_pressed()[0]:
-            if self.rect.collidepoint(mousepos):
+            if not self.picked and self.rect.collidepoint(mousepos):
                 #clicked!!
+                self.click_difference = (self.rect.x - mousepos.x, self.rect.y - mousepos.y)
                 self.picked = True
+
         else:
             self.picked = False
         
         if self.picked:
-            self.rect.x = mousepos.x - self.rect.width/2
-            self.rect.y = mousepos.y - self.rect.height/2
+            self.rect.x = mousepos.x + self.click_difference[0]
+            self.rect.y = mousepos.y + self.click_difference[1]
         
         
 
