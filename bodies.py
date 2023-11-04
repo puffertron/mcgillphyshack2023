@@ -59,7 +59,13 @@ class Planet(pygame.sprite.Sprite):
             self.rect.x = mousepos.x - self.rect.width/2
             self.rect.y = mousepos.y - self.rect.height/2
         
-        
+        #collision
+        target_group = self.groups()[0]
+        collisions = pygame.sprite.spritecollide(self, target_group, False)
+        for sprite in collisions:
+            if sprite == self: continue
+            normal = Vector2(sprite.rect.center) - Vector2(self.rect.center)
+            resolution = normal - sprite
 
     
     def visualGravity(self):
