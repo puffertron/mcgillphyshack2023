@@ -12,7 +12,6 @@ running = True
 
 group = pygame.sprite.Group()
 
-
 #Make planets - Can randomize
 planets = pygame.sprite.Group()
 p1 = bodies.Planet(30,100,pygame.color.Color("green"))
@@ -31,14 +30,8 @@ for p in group.sprites():
     p.randomizePosition()
     p.debugDisplay()
 
-# Define our Missile and group it
-m = missile.Missile()
-
-missileGroup = pygame.sprite.Group()
-missileGroup.add(m)
-
 while running:
-    GameFuncs.movePlanet()
+    GameFuncs.shootMissile()
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -52,14 +45,13 @@ while running:
     
     group.update(screen)
     group.draw(screen)
-
-    # Update the missile and pass the screen for its effects screen
-    missileGroup.update(group, screen)
-    missileGroup.draw(screen)
+    State.missleGroup.update(screen)
+    State.missleGroup.draw(screen)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
 
     clock.tick(30)  # limits FPS to 60
+    print(State.missleGroup)
 
 pygame.quit()

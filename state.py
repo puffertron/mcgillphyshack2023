@@ -9,6 +9,8 @@ class State:
     gameRunning = True
 
     planets: 'pg.sprite.Group[Planet]' = None
+    missleGroup = pg.sprite.Group()
+
     @classmethod
     def setPlanets(cls, planets):
         cls.planets = planets

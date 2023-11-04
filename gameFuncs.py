@@ -1,5 +1,6 @@
 import pygame as pg
 import bodies
+import missile
 from state import State
 
 class GameFuncs():
@@ -63,3 +64,27 @@ class GameFuncs():
             if not pg.mouse.get_pressed()[0]:
                 cls.chosenPlanet = None
                 # TODO update state mode
+
+    missile_: missile.Missile = None
+    @classmethod
+    def shootMissile(cls):
+        """Called when in Shooting mode"""
+
+        # Define our Missile and group it
+        if cls.missile_ == None:
+            cls.missile_ = missile.Missile()
+            State.missleGroup.add(cls.missile_)
+
+        # Determine acceleration based on position
+        cls.missile_.a = cls.missile_.acceleleration(State.planets)
+
+        # Increment velocity based on a
+        cls.missile_.v += cls.missile_.a
+
+        # Increment position based on velocity
+        cls.missile_.oldX.append(cls.missile_.oldX[-1] + cls.missile_.v)
+        cls.missile_.rect.center = cls.missile_.oldX[-1]
+
+        # Only keep MaxLen old positions
+        if len(cls.missile_.oldX) > cls.missile_.oldXMaxLen:
+            cls.missile_.oldX.pop(1)
