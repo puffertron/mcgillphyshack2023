@@ -2,10 +2,11 @@ import pygame
 from gameFuncs import GameFuncs
 from state import State
 import bodies
+import missile
 from pygame import freetype, color
 
 pygame.init()
-screen = pygame.display.set_mode((300, 400))
+screen = pygame.display.set_mode((600, 800))
 clock = pygame.time.Clock()
 running = True
 
@@ -30,6 +31,12 @@ for p in group.sprites():
     p.randomizePosition()
     p.debugDisplay()
 
+# Define our Missile and group it
+m = missile.Missile()
+
+missileGroup = pygame.sprite.Group()
+missileGroup.add(m)
+
 while running:
     GameFuncs.movePlanet()
     # poll for events
@@ -45,10 +52,14 @@ while running:
     
     group.update(screen)
     group.draw(screen)
+
+    # Update the missile and pass the screen for its effects screen
+    missileGroup.update(group, screen)
+    missileGroup.draw(screen)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(30)  # limits FPS to 60
 
 pygame.quit()
