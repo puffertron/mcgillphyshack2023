@@ -5,7 +5,7 @@ import bodies
 from pygame import freetype, color
 
 pygame.init()
-screen = pygame.display.set_mode((300, 600))
+screen = pygame.display.set_mode((1200, 900))
 clock = pygame.time.Clock()
 running = True
 
