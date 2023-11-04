@@ -1,5 +1,6 @@
 import pygame
 import bodies
+from pygame import freetype, color
 
 pygame.init()
 screen = pygame.display.set_mode((300, 600))
@@ -30,10 +31,10 @@ while running:
     screen.fill("black")
 
     # RENDER YOUR GAME HERE
+    
     group.update(screen)
     group.draw(screen)
     
-
     # flip() the display to put your work on screen
     pygame.display.flip()
 

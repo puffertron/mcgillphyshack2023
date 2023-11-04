@@ -5,16 +5,25 @@ from pygame import color
 
 
 class Label(pygame.sprite.Sprite):
-    def __init__(self, text: str, color, bg):
+    def __init__(self, text: str):
         pygame.sprite.Sprite.__init__(self)
 
-        self.font = freetype.SysFont("Consolas", 12)
+        self.fg = color.Color("black")
+        self.bg =  color.Color("white")
+
+        self.font = freetype.SysFont(freetype.get_default_font(), 12)
 
         self.text = text
-        self.image, self.rect = self.font.render(self.text, True, color)
-        bgimg = self.image
-        bgimg.fill(bg)
-        self.image = bgimg.blit(self.image,self.rect)
+        self.image, self.rect = self.font.render(self.text, self.fg, self.bg)
+        # bgimg = self.image
+        # bgimg.fill(bg)
+        # bgimg.blit(self.image,self.rect)
+        # self.image = bgimg
+    
+    def update(self, parent: pygame.sprite.Sprite =None):
+        if parent:
+            self.rect.x = parent.rect.x
+            self.rect.y = parent.rect.y
 
         
         
