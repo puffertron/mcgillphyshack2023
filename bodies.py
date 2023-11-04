@@ -48,36 +48,7 @@ class Planet(pg.sprite.Sprite):
         self.children.draw(screen)
         
 
-        #drag n drop
-        mousepos = Vector2(mouse.get_pos())
-        if mouse.get_pressed()[0]:
-            if self.rect.collidepoint(mousepos):
-                #clicked!!
-                self.picked = True
-        else:
-            self.picked = False
         
-        if self.picked:
-            self.rect.x = mousepos.x - self.rect.width/2
-            self.rect.y = mousepos.y - self.rect.height/2
-        
-            #collision
-            target_group = self.groups()[0]
-
-            resolution = Vector2()
-            collisions = []
-            for body in target_group:
-                if body == self: continue
-                if pygame.sprite.collide_circle(self, body):
-                    normal = Vector2(body.rect.center) - Vector2(self.rect.center)
-                    collisions.append((body, normal))
-
-                    normal = Vector2(body.rect.center) - Vector2(self.rect.center)
-                    resolution = (int(normal.length()) - (body.radius + self.radius))* normal.normalize() 
-                    print(f"r1:{body.radius} r2:{self.radius}")        
-            
-            self.rect.x += resolution.x
-            self.rect.y += resolution.y
 
 
     
