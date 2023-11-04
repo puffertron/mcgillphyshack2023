@@ -55,7 +55,7 @@ class Missile(pygame.sprite.Sprite):
 
 
     def acceleleration(self, planets):
-        G = -1
+        G = -0.5
         a = Vector2() # empty acceleration
         xm = Vector2(self.rect.center) # position of craft
         for p in planets:
