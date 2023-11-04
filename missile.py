@@ -22,24 +22,24 @@ class Missile(pygame.sprite.Sprite):
         self.oldX = [Vector2(self.rect.center)]
         self.oldXMaxLen = 60
 
-    def update(self, planets, screen):
+    #def update(self, planets, screen):
         
         # Determine acceleration based on position
-        self.a = self.acceleleration(planets)
+        #self.a = self.acceleleration(planets)
 
         # Increment velocity based on a
-        self.v = self.v + self.a
+        #self.v = self.v + self.a
 
         # Increment position based on velocity
-        self.oldX.append(self.oldX[-1] + self.v)
-        self.rect.center = self.oldX[-1]
+        #self.oldX.append(self.oldX[-1] + self.v)
+        #self.rect.center = self.oldX[-1]
 
         # Only keep MaxLen old positions
-        if len(self.oldX) > self.oldXMaxLen:
-            self.oldX.pop(1)
+        #if len(self.oldX) > self.oldXMaxLen:
+        #    self.oldX.pop(1)
 
         # Draw the tail
-        self.drawtrail(screen)
+        #self.drawtrail(screen)
 
     def drawtrail(self, screen):
         # Reset the Screen

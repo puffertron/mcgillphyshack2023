@@ -1,5 +1,6 @@
 import pygame as pg
 import bodies
+from missile import Missile
 from state import State
 import math
 
@@ -13,11 +14,17 @@ class GameFuncs():
     def movePlanet(cls):
         """Called when in Moving Planets Mode"""
         if not cls.chosenPlanet:
-            #Check if clicking on planet
+            #Check if starting to move planet
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
                 
-                for planet in State.planets:
+                if State.currentPlayer == 0:
+                    playersPlanets = State.p0Planets
+                elif State.currentPlayer == 1:
+                    playersPlanets = State.p1Planets
+
+                for planet in playersPlanets:
+                    #For each planet, see if clicking on planet
                     positionInMask = mousepos.x - planet.rect.x, mousepos.y - planet.rect.y
                     if planet.rect.collidepoint(mousepos) and planet.mask.get_at(positionInMask):
                         cls.chosenPlanet = planet
@@ -33,17 +40,8 @@ class GameFuncs():
 
             cls.chosenPlanet.rect.x = mousepos.x + cls.clickDifference[0]
             cls.chosenPlanet.rect.y = mousepos.y + cls.clickDifference[1]
-
-            # for body in State.planets:
-            #     #(x - center_x)² + (y - center_y)² < radius²
-            #     if (int(targetx - body.rect.centerx)^2 + int(targety - body.rect.centery)^2) < (body.radius^2):
-            #         print("bad")
-            #         cls.chosenPlanet.rect.x = targetx
-            #         cls.chosenPlanet.rect.y = targety
-            #     else:
-            #         print("good")
-                    
-
+            
+            #collision
             resolution = pg.Vector2()
             collisions = []
             bodyB = None
@@ -115,3 +113,32 @@ def intersectTwoCircles(x1,y1,r1,x2,y2,r2):
     iy2 = fy - gy
 
     return (pg.Vector2(ix1, iy1), pg.Vector2(ix2, iy2))
+
+
+    missile: Missile = None
+    @classmethod
+    def missileLaunched(cls):
+        """Called when in Shooting mode"""
+
+        # Define our Missile and group it
+        if cls.missile == None:
+            cls.missile = Missile()
+            if State.currentPlayer == 0:
+                State.addToP0Group(cls.missile)
+            elif State.currentPlayer == 1:
+                State.addToP1Group(cls.missile)
+                
+
+        # Determine acceleration based on position
+        cls.missile.a = cls.missile.acceleleration(State.planets)
+
+        # Increment velocity based on a
+        cls.missile.v += cls.missile.a
+
+        # Increment position based on velocity
+        cls.missile.oldX.append(cls.missile.oldX[-1] + cls.missile.v)
+        cls.missile.rect.center = cls.missile.oldX[-1]
+
+        # Only keep MaxLen old positions
+        if len(cls.missile.oldX) > cls.missile.oldXMaxLen:
+            cls.missile.oldX.pop(1)
