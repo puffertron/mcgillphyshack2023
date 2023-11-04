@@ -2,6 +2,7 @@ import pygame as pg
 from pygame import gfxdraw
 import effects
 import random
+import uuid
 
 class Planet(pg.sprite.Sprite):
     def __init__(self, radius, mass, color, owner:int):
@@ -46,6 +47,7 @@ class Planet(pg.sprite.Sprite):
     def update(self, screen):
         self.children.update(parent = self)
         self.children.draw(screen)
-    
+
+
     def visualGravity(self):
         pass

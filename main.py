@@ -1,10 +1,12 @@
 import pygame
 from gameFuncs import GameFuncs
 from state import State
+import bodies
+import missile
 from pygame import freetype, color
 
 pygame.init()
-screen = pygame.display.set_mode((1200, 900))
+screen = pygame.display.set_mode((600, 800))
 clock = pygame.time.Clock()
 running = True
 
@@ -34,12 +36,19 @@ while running:
         elif event.type == pygame.KEYDOWN:
                 if event.unicode == "a":
                     State.currentPlayer = int(not bool(State.currentPlayer))
+                elif event.unicode == "s":
+                    State.movingPlanetsMode = False
+                    State.missileLaunchedMode = True
+                elif event.unicode == "d":
+                    State.movingPlanetsMode = True
+                    State.missileLaunchedMode = False
+                    
     
     # Do logic based on current mode
     if State.movingPlanetsMode:
         GameFuncs.movePlanet()
-    if State.choosingProjectileMode:
-        pass
+    if State.missileLaunchedMode:
+        GameFuncs.missileLaunched()
     if State.bufferMode:
         pass
 
@@ -60,6 +69,6 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    clock.tick(30)  # limits FPS to 60
 
 pygame.quit()

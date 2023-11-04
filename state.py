@@ -39,10 +39,13 @@ class State:
     def addToP1Group(cls, sprites): 
         #sprites can be sprite, or list of sprites, or group
         cls.p1Group.add(sprites)
+
     
     movingPlanetsMode = False
-    choosingProjectileMode = False
+    aimingMissileMode = False
+    missileLaunchedMode = False
     bufferMode = False
+    currentGroup = p0Group
 
 
 
