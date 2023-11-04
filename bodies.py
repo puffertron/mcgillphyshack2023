@@ -46,11 +46,7 @@ class Planet(pg.sprite.Sprite):
     def update(self, screen):
         self.children.update(parent = self)
         self.children.draw(screen)
-        
-
-        
 
 
-    
     def visualGravity(self):
         pass
