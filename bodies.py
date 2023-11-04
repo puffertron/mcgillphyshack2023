@@ -4,6 +4,7 @@ from pygame import gfxdraw
 from pygame import mouse
 import effects
 import random
+import uuid
 
 class Planet(pygame.sprite.Sprite):
     def __init__(self, radius, mass, color):
@@ -59,13 +60,24 @@ class Planet(pygame.sprite.Sprite):
             self.rect.x = mousepos.x - self.rect.width/2
             self.rect.y = mousepos.y - self.rect.height/2
         
-        #collision
-        target_group = self.groups()[0]
-        collisions = pygame.sprite.spritecollide(self, target_group, False)
-        for sprite in collisions:
-            if sprite == self: continue
-            normal = Vector2(sprite.rect.center) - Vector2(self.rect.center)
-            resolution = normal - sprite
+            #collision
+            target_group = self.groups()[0]
+
+            resolution = Vector2()
+            collisions = []
+            for body in target_group:
+                if body == self: continue
+                if pygame.sprite.collide_circle(self, body):
+                    normal = Vector2(body.rect.center) - Vector2(self.rect.center)
+                    collisions.append((body, normal))
+
+                    normal = Vector2(body.rect.center) - Vector2(self.rect.center)
+                    resolution = (int(normal.length()) - (body.radius + self.radius))* normal.normalize() 
+                    print(f"r1:{body.radius} r2:{self.radius}")        
+            
+            self.rect.x += resolution.x
+            self.rect.y += resolution.y
+
 
     
     def visualGravity(self):
