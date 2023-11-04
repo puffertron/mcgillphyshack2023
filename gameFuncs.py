@@ -56,7 +56,7 @@ class GameFuncs():
 
             #double collission failsafe!
             #check collisions again 
-            for body in State.planets:
+            for body in State.planetGroups[State.activePlayer]:
                 if body == cls.chosenPlanet or body == bodyB: continue
                 if pg.sprite.collide_circle(cls.chosenPlanet, body):
                     bodyC = body
