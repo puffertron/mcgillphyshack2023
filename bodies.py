@@ -1,6 +1,7 @@
 import pygame
 from pygame import Vector2
 from pygame import gfxdraw
+from pygame import mouse
 import effects
 import random
 
@@ -30,16 +31,38 @@ class Planet(pygame.sprite.Sprite):
 
     def debugDisplay(self):
         if self.display_mass:
-            l = effects.Label(f"mass: {self.mass}", pygame.Color("white"), pygame.Color("orange"))
+            l = effects.Label(f"mass: {self.mass}")
             self.children.add(l)
     
     def randomizePosition(self):
-        self.rect.x = random.randint(0, 400)
-        self.rect.y = random.randint(0, 400)
+        self.rect.x = random.randint(0, 200)
+        self.rect.y = random.randint(0, 200)
+
+    def getInput(self):
+        pass
 
     def update(self, screen):
-        self.children.update()
+        self.children.update(parent = self)
         self.children.draw(screen)
+        
+
+        #drag n drop
+        mousepos = Vector2(mouse.get_pos())
+        if mouse.get_pressed()[0]:
+            if not self.picked and self.rect.collidepoint(mousepos):
+                #clicked!!
+                self.click_difference = (self.rect.x - mousepos.x, self.rect.y - mousepos.y)
+                self.picked = True
+
+        else:
+            self.picked = False
+        
+        if self.picked:
+            self.rect.x = mousepos.x + self.click_difference[0]
+            self.rect.y = mousepos.y + self.click_difference[1]
+        
+        
+
     
     def visualGravity(self):
         pass
