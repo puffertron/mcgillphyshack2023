@@ -51,13 +51,9 @@ class GameFuncs():
             for body in State.planets:
                 if body == cls.chosenPlanet: continue
                 if pg.sprite.collide_circle(cls.chosenPlanet, body):
-                    # normal = pg.Vector2(body.rect.center) - pg.Vector2(cls.chosenPlanet.rect.center)
-                    # collisions.append((body, normal))
-
                     normal = pg.Vector2(body.rect.center) - pg.Vector2(cls.chosenPlanet.rect.center)
                     resolution = (int(normal.length()) - (body.radius + cls.chosenPlanet.radius))* normal.normalize() 
-                    print(f"r1:{body.radius} r2:{cls.chosenPlanet.radius}")        
-            
+
             cls.chosenPlanet.rect.x += resolution.x
             cls.chosenPlanet.rect.y += resolution.y
 
