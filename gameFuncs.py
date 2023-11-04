@@ -2,6 +2,7 @@ import pygame as pg
 import bodies
 from missile import Missile
 from state import State
+import config
 
 class GameFuncs():
     """Funcs for different game modes, func will be called each frame"""
@@ -16,13 +17,8 @@ class GameFuncs():
             #Check if starting to move planet
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
-                
-                if State.currentPlayer == 0:
-                    playersPlanets = State.p0Planets
-                elif State.currentPlayer == 1:
-                    playersPlanets = State.p1Planets
-
-                for planet in playersPlanets:
+            
+                for planet in State.planetGroups[State.activePlayer]:
                     #For each planet, see if clicking on planet
                     positionInMask = mousepos.x - planet.rect.x, mousepos.y - planet.rect.y
                     if planet.rect.collidepoint(mousepos) and planet.mask.get_at(positionInMask):
@@ -40,7 +36,7 @@ class GameFuncs():
             #collision
             resolution = pg.Vector2()
             collisions = []
-            for body in State.planets:
+            for body in State.planetGroups[State.activePlayer]:
                 if body == cls.chosenPlanet: continue
                 if pg.sprite.collide_circle(cls.chosenPlanet, body):
                     normal = pg.Vector2(body.rect.center) - pg.Vector2(cls.chosenPlanet.rect.center)
@@ -52,7 +48,8 @@ class GameFuncs():
             #Let go of mouse
             if not pg.mouse.get_pressed()[0]:
                 cls.chosenPlanet = None
-                # TODO update state mode
+                State.movingPlanetsMode = False
+                State.missileLaunchedMode = True
 
     missile: Missile = None
     @classmethod
@@ -61,15 +58,11 @@ class GameFuncs():
 
         # Define our Missile and group it
         if cls.missile == None:
-            cls.missile = Missile()
-            if State.currentPlayer == 0:
-                State.addToP0Group(cls.missile)
-            elif State.currentPlayer == 1:
-                State.addToP1Group(cls.missile)
-                
+            cls.missile = Missile(config.missileRadius)
+            State.playerGroups[State.activePlayer].add(cls.missile)
 
         # Determine acceleration based on position
-        cls.missile.a = cls.missile.acceleleration(State.planets)
+        cls.missile.a = cls.missile.acceleleration()
 
         # Increment velocity based on a
         cls.missile.v += cls.missile.a
@@ -81,3 +74,29 @@ class GameFuncs():
         # Only keep MaxLen old positions
         if len(cls.missile.oldX) > cls.missile.oldXMaxLen:
             cls.missile.oldX.pop(1)
+
+        # Check if collision
+        for planet in State.planets:
+            distSquared = (cls.missile.rect.centerx - planet.rect.centerx)^2 + (cls.missile.rect.centery - planet.rect.centery)^2
+            minDist = (planet.radius + cls.missile.radius)
+
+            if distSquared <= minDist^2:
+        
+                #TODO collision stuff
+                if planet in State.planetGroups[State.inactivePlayer]:
+                    planet.kill()
+                    print("killed enemy planet! with radius " + str(planet.radius))
+                
+                else:
+                    print("hit an ally? with radius " + str(planet.radius))
+                print(planet.groups())
+                print(cls.missile.rect.center, planet.rect.center)
+                print(distSquared, str(minDist^2))
+
+                cls.missile.kill()
+                cls.missile = None
+
+                State.switchPlayer()
+                break
+
+                

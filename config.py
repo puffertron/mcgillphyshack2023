@@ -9,3 +9,5 @@ playFieldHeight = 400
 
 topOfPlayField = 100
 leftOfPlayField = 100
+
+missileRadius = 5
