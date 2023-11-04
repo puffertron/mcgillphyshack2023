@@ -12,11 +12,17 @@ class GameFuncs():
     def movePlanet(cls):
         """Called when in Moving Planets Mode"""
         if not cls.chosenPlanet:
-            #Check if clicking on planet
+            #Check if starting to move planet
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
                 
-                for planet in State.planets:
+                if State.currentPlayer == 0:
+                    playersPlanets = State.p0Planets
+                elif State.currentPlayer == 1:
+                    playersPlanets = State.p1Planets
+
+                for planet in playersPlanets:
+                    #For each planet, see if clicking on planet
                     positionInMask = mousepos.x - planet.rect.x, mousepos.y - planet.rect.y
                     if planet.rect.collidepoint(mousepos) and planet.mask.get_at(positionInMask):
                         cls.chosenPlanet = planet
