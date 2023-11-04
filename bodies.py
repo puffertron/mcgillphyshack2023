@@ -1,19 +1,18 @@
-import pygame
-from pygame import Vector2
+import pygame as pg
 from pygame import gfxdraw
-from pygame import mouse
 import effects
 import random
+import uuid
 
-class Planet(pygame.sprite.Sprite):
+class Planet(pg.sprite.Sprite):
     def __init__(self, radius, mass, color):
-        pygame.sprite.Sprite.__init__(self)
+        pg.sprite.Sprite.__init__(self)
 
         self.radius = radius
         self.mass = mass
         self.color = color
 
-        self.image = pygame.Surface((self.radius*2, self.radius*2))
+        self.image = pg.Surface((self.radius*2, self.radius*2))
         self.rect = self.image.get_rect()
 
         #temp planet circle
@@ -23,11 +22,14 @@ class Planet(pygame.sprite.Sprite):
 
         self.picked = False
 
-        self.children = pygame.sprite.Group()
+        self.children = pg.sprite.Group()
 
         #debug stuff
         self.display_mass = False
         self.display_radius = False
+
+        #mask
+        self.mask = pg.mask.from_surface(self.image)
 
     def debugDisplay(self):
         if self.display_mass:
@@ -46,25 +48,9 @@ class Planet(pygame.sprite.Sprite):
         self.children.draw(screen)
         
 
-        #drag n drop
-        mousepos = Vector2(mouse.get_pos())
-        if mouse.get_pressed()[0]:
-            if not self.picked and self.rect.collidepoint(mousepos):
-                #clicked!!
-                self.click_difference = (self.rect.x - mousepos.x, self.rect.y - mousepos.y)
-                self.picked = True
+        
 
-        else:
-            self.picked = False
-        
-        if self.picked:
-            self.rect.x = mousepos.x + self.click_difference[0]
-            self.rect.y = mousepos.y + self.click_difference[1]
-        
-        
 
     
     def visualGravity(self):
         pass
-
-

@@ -1,4 +1,6 @@
 import pygame
+from gameFuncs import GameFuncs
+from state import State
 import bodies
 import missile
 from pygame import freetype, color
@@ -10,12 +12,20 @@ running = True
 
 group = pygame.sprite.Group()
 
+
+#Make planets - Can randomize
+planets = pygame.sprite.Group()
 p1 = bodies.Planet(30,100,pygame.color.Color("green"))
 p2 = bodies.Planet(60,800,pygame.color.Color("blue"))
 p3 = bodies.Planet(10,90,pygame.color.Color("purple"))
 p4 = bodies.Planet(16,500,pygame.color.Color("magenta"))
+planets.add(p1,p2,p3,p4)
+
+#Store planets in state
 
 group.add(p1, p2, p3, p4)
+
+State.setPlanets(planets)
 
 for p in group.sprites():
     p.randomizePosition()
@@ -28,6 +38,7 @@ missileGroup = pygame.sprite.Group()
 missileGroup.add(m)
 
 while running:
+    GameFuncs.movePlanet()
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
