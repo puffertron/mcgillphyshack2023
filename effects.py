@@ -22,13 +22,12 @@ class Label(pg.sprite.Sprite):
 class GameArea(pg.sprite.Sprite):
     def __init__(self, player):
         pg.sprite.Sprite.__init__(self)
-        self.rect = pg.rect.Rect(config.leftOfPlayField, config.topOfPlayField, config.playFieldWidth, config.playFieldHeight)
+        self.rect = pg.rect.Rect(0,0, config.playFieldHeight, config.playFieldWidth)
         self.image = pg.surface.Surface((self.rect.width, self.rect.height))
         self.player = player
         if self.player == 0:
-            pg.gfxdraw.box(self.image, self.rect, pg.color.Color("red"))
+            pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("red"))
         else:
-            pg.gfxdraw.box(self.image, self.rect, pg.color.Color("blue"))
-            self.rect.y =+ self.rect.height
+            pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("blue"))
 
 

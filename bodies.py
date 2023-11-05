@@ -37,9 +37,9 @@ class Planet(pg.sprite.Sprite):
             l = effects.Label(f"mass: {self.mass}")
             self.children.add(l)
     
-    def randomizePosition(self):
-        self.rect.x = random.randint(0, 200)
-        self.rect.y = random.randint(0, 200)
+    def randomizePosition(self, topleft, bottomright):
+        self.rect.x = random.randint(topleft.x, bottomright.x)
+        self.rect.y = random.randint(topleft.y, bottomright.y)
 
     def getInput(self):
         pass

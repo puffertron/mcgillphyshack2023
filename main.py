@@ -1,31 +1,21 @@
 import pygame as pg
 from gameFuncs import GameFuncs
 from state import State
-import bodies, missile, effects
+import bodies, missile, effects, setup, config
 from launcher import Launcher
 from pygame import freetype, color
 
 pg.init()
-screen = pg.display.set_mode((600, 800))
+screen = pg.display.set_mode((config.windowWidth, config.windowHeight))
 clock = pg.time.Clock()
 running = True
 
-player0Area = effects.GameArea(0)
-player1Area = effects.GameArea(1)
-
-bgGroup = pg.sprite.Group()
-bgGroup.add(player0Area, player1Area)
+#setup scene
+setup.setupGameArea()
 
 #Make planets
-State.makePlanet(30,100,pg.color.Color("green"), 0)
-State.makePlanet(60,800,pg.color.Color("blue"), 0)
-State.makePlanet(10,90,pg.color.Color("purple"), 0)
-State.makePlanet(16,500,pg.color.Color("magenta"), 0)
-
-State.makePlanet(30,100,pg.color.Color("green"), 1)
-State.makePlanet(60,800,pg.color.Color("blue"), 1)
-State.makePlanet(10,90,pg.color.Color("purple"), 1)
-State.makePlanet(16,500,pg.color.Color("magenta"), 1)
+# setup.makePlanetsRandom()
+setup.makePlanetsFixed(40)
 
 
 #TEMP
@@ -72,10 +62,16 @@ while running:
 
 
     # RENDER YOUR GAME HERE
-    bgGroup.draw(screen)
+    State.bgGroup.update()
+    State.bgGroup.draw(screen)
 
     State.playerGroups[State.activePlayer].update(screen)
     State.playerGroups[State.activePlayer].draw(screen)
+
+    #draw fx layers
+    State.fxGroup.update()
+    State.fxGroup.draw(screen)
+
     #TODO Can show passing game screen
    
     # flip() the display to put your work on screen
