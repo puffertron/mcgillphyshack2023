@@ -2,6 +2,7 @@ import pygame as pg
 from gameFuncs import GameFuncs
 from state import State
 import bodies, missile, effects, setup, config
+from launcher import Launcher
 from pygame import freetype, color
 
 pg.init()
@@ -28,19 +29,29 @@ while running:
         if event.type == pg.QUIT:
             running = False
         elif event.type == pg.KEYDOWN:
-                if event.unicode == "a":
-                    State.switchPlayer()
-                elif event.unicode == "s":
-                    State.movingPlanetsMode = False
-                    State.missileLaunchedMode = True
-                elif event.unicode == "d":
-                    State.movingPlanetsMode = True
-                    State.missileLaunchedMode = False
+            if event.unicode == "a":
+                State.switchPlayer()
+            elif event.unicode == "s":
+                State.movingPlanetsMode = False
+                State.missileLaunchedMode = True
+            elif event.unicode == "d":
+                State.movingPlanetsMode = True
+                State.missileLaunchedMode = False
+            elif event.unicode == "f":
+                State.aimingMissileMode = True
+                launcher = Launcher(State.activePlayer)
+                State.launcher = launcher
+                State.playerGroups[State.activePlayer].add(launcher)
+
+            #TODO - add detection of button clicks for changing modes
+            
                     
     
     # Do logic based on current mode
     if State.movingPlanetsMode:
         GameFuncs.movePlanet()
+    if State.aimingMissileMode:
+        GameFuncs.controlLauncher()
     if State.missileLaunchedMode:
         GameFuncs.missileLaunched()
     if State.bufferMode:

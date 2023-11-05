@@ -15,6 +15,9 @@ gravity = -1
 
 missileRadius = 5
 
+
+yposLauncher = 10
+
 p0colors = ["green", "blue", "cyan", "indigo", "darkgreen"]
 p1colors = ["red", "orange", "magenta", "yellow", "purple"]
 
