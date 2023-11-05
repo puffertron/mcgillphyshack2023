@@ -93,22 +93,11 @@ class GameFuncs():
 
         # Define our Missile and group it
         if cls.missile == None:
-            cls.missile = Missile(config.missileRadius)
+            cls.missile = Missile(config.missileRadius, Vector2(), Vector2())
             State.playerGroups[State.activePlayer].add(cls.missile)
 
-        # Determine acceleration based on position
-        cls.missile.a = cls.missile.acceleleration()
-
-        # Increment velocity based on a
-        cls.missile.v += cls.missile.a
-
-        # Increment position based on velocity
-        cls.missile.oldX.append(cls.missile.oldX[-1] + cls.missile.v)
-        cls.missile.rect.center = cls.missile.oldX[-1]
-
-        # Only keep MaxLen old positions
-        if len(cls.missile.oldX) > cls.missile.oldXMaxLen:
-            cls.missile.oldX.pop(1)
+        # Update Missile Position
+        cls.missile.updateKinematics(State.planets)
 
         # Check if collision
         # for planet in State.planets:

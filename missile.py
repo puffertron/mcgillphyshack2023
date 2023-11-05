@@ -27,6 +27,6 @@ class Missile(pg.sprite.Sprite):
         self.rect.center = self.k.pos
 
     def updateKinematics(self, planets):
-        # returns a new kinematics object
+        # updates the kinematics values of the missile
         self.k.nextPosSIE(planets)
         self.rect.center = self.k.pos
