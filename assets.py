@@ -15,3 +15,9 @@ BG_ART = [
     pg.image.load("assets/bg/hack23-bg-dust-texture.png"),
     pg.image.load("assets/bg/hack23-dust-texture-mask.png"),  
 ]
+
+UI_ELEMENTS = [
+    pg.image.load("assets/ui/hack23-textbox-active.png"),
+    pg.image.load("assets/ui/hack23-textbox-idle.png"),
+    pg.image.load("assets/ui/hack23-playarea-border.png")
+]

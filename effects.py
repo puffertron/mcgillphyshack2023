@@ -1,5 +1,6 @@
 import pygame as pg
 import config
+import assets
 
 def blit_mask(source, dest, destpos, mask, maskrect):
     """
@@ -55,12 +56,15 @@ class GameArea(pg.sprite.DirtySprite):
         pg.sprite.DirtySprite.__init__(self)
         self.rect = pg.rect.Rect(0,0, config.playFieldWidth, config.playFieldHeight)
         self.image = pg.surface.Surface((self.rect.width, self.rect.height))
-        self.image.set_alpha(0.2)
+        art = assets.UI_ELEMENTS[2]
+        art = pg.transform.smoothscale(art, self.image.get_rect().size)
+        self.image = art
+        # self.image.set_alpha(100)
         self.player = player
-        if self.player == 0:
-            pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("red"))
-        else:
-            pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("blue"))
+        # if self.player == 0:
+        #     pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("red"))
+        # else:
+        #     pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("blue"))
 
 
 
