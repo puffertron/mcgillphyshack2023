@@ -24,8 +24,7 @@ arrowheadRadius = 5
 
 defaultMissileVel = 5 #Might not be used later
 
-crosshairRadius = 15
-
+maxLaunchSpeed = 60
 crosshairRadius = 15
 
 # Default Planet Attributes - tuples of (radius, mass, type)

@@ -20,7 +20,8 @@ class State:
     p1Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p0LaunchGroup = pg.sprite.Group()
     p1LaunchGroup = pg.sprite.Group()
-    launcher: Launcher = None
+    p0Launcher: Launcher = Launcher(0)
+    p1Launcher: Launcher = Launcher(1)
     p0crosshair: pg.sprite.Sprite = None
     p1crosshair: pg.sprite.Sprite = None
     p0Group: pg.sprite.Group = pg.sprite.Group()
@@ -37,6 +38,7 @@ class State:
     fxGroup: pg.sprite.Group = pg.sprite.Group()
     fx1 = None
     fx2 = None
+    fxSpecificPlayers = None #Will have two layers, 0 is for p0, 1 is for p1. This is NOT in fxGroup
 
     #group for bg
     bgGroup: pg.sprite.Group = pg.sprite.Group()
@@ -47,6 +49,7 @@ class State:
     playerGroups = [p0Group, p1Group, passGroup]
     planetGroups = [p0Planets, p1Planets]
     crosshairs = [p0crosshair, p1crosshair]
+    launchers = [p0Launcher, p1Launcher]
 
 
     #Different game states
