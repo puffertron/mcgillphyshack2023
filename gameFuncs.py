@@ -228,7 +228,7 @@ class GameFuncs():
         if cls.missile == None:
             print("missile was created!")
             misInitPos = Vector2(State.launchers[State.activePlayer].rect.center)
-            misInitVel = Vector2(0, -config.defaultMissileVel*(-1**State.activePlayer)) #Opposite directio based on player (player on opposite side of board)
+            misInitVel = Vector2(0, (-State.launchers[State.activePlayer].speed / 6) *(-1)**State.activePlayer) #Opposite directio based on player (player on opposite side of board)
             cls.missile = Missile(config.missileRadius, misInitPos, misInitVel)
             State.playerGroups[State.activePlayer].add(cls.missile)
             cls.launchedTime = time.time()
