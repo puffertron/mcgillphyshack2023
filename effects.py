@@ -1,29 +1,33 @@
-import pygame
-from pygame import Vector2
-from pygame import freetype
-from pygame import color
+import pygame as pg
+import config
 
-
-class Label(pygame.sprite.Sprite):
+class Label(pg.sprite.Sprite):
     def __init__(self, text: str):
-        pygame.sprite.Sprite.__init__(self)
+        pg.sprite.Sprite.__init__(self)
 
         self.fg = color.Color("black")
         self.bg =  color.Color("white")
 
-        self.font = freetype.SysFont(freetype.get_default_font(), 12)
+        self.font = pg.freetype.SysFont(freetype.get_default_font(), 12)
 
         self.text = text
         self.image, self.rect = self.font.render(self.text, self.fg, self.bg)
-        # bgimg = self.image
-        # bgimg.fill(bg)
-        # bgimg.blit(self.image,self.rect)
-        # self.image = bgimg
     
-    def update(self, parent: pygame.sprite.Sprite =None):
+    def update(self, parent: pg.sprite.Sprite =None):
         if parent:
             self.rect.x = parent.rect.x
             self.rect.y = parent.rect.y
 
         
-     
+class GameArea(pg.sprite.Sprite):
+    def __init__(self, player):
+        pg.sprite.Sprite.__init__(self)
+        self.rect = pg.rect.Rect(0,0, config.playFieldHeight, config.playFieldWidth)
+        self.image = pg.surface.Surface((self.rect.width, self.rect.height))
+        self.player = player
+        if self.player == 0:
+            pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("red"))
+        else:
+            pg.gfxdraw.rectangle(self.image, self.rect, pg.color.Color("blue"))
+
+

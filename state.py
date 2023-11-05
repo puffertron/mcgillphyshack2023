@@ -1,6 +1,7 @@
 import pygame as pg
 from typing import List
 from bodies import Planet
+from launcher import Launcher
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -10,12 +11,23 @@ class State:
 
     activePlayer, inactivePlayer = 0, 1 #Should be 0, 1, or None
 
+    #groups!!!
     planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p0Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p1Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
+    launcher: Launcher = None
     p0Group: pg.sprite.Group = pg.sprite.Group()
     p1Group: pg.sprite.Group = pg.sprite.Group()
+
     passGroup: pg.sprite.Group = pg.sprite.Group()
+
+    #group for fx layers
+    fxGroup: pg.sprite.Group = pg.sprite.Group()
+
+    #group for bg
+    bgGroup: pg.sprite.Group() = pg.sprite.Group()
+
+    playrects = []
 
     playerGroups = [p0Group, p1Group, passGroup]
     planetGroups = [p0Planets, p1Planets]
@@ -29,17 +41,3 @@ class State:
     def switchPlayer():
         State.inactivePlayer = State.activePlayer
         State.activePlayer = int(not bool(State.activePlayer))
-
-    def makePlanet(radius, mass, color, owner: int):
-        """Makes a planet and adds to proper group, randomizes position inside player region"""
-        #Make planet
-        newPlanet = Planet(radius,mass,color, owner)
-
-        #Add to groups
-        State.planets.add(newPlanet)
-        State.planetGroups[owner].add(newPlanet)
-        State.playerGroups[owner].add(newPlanet)
-        
-        #Randomize position
-        newPlanet.randomizePosition() #TODO - should get position in correct position for given player
-        newPlanet.debugDisplay()

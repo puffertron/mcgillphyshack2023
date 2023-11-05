@@ -2,16 +2,21 @@ import pygame
 
 #This file just holds config constants that we might want to change, things like screen resolution
 
+windowWidth = 600
+windowHeight = 700
+
 playFieldWidth = 300
 playFieldHeight = 400
 
-topOfPlayField = 100
+topOfPlayField = 50
 leftOfPlayField = 100
 
 gravity = -1
 
 missileRadius = 5
 markerSize = 6
+
+yposLauncher = 10
 
 # Default Planet Attributes - tuples of (radius, mass)
 default_planets = [
@@ -22,13 +27,8 @@ default_planets = [
     (15, 40)   # dwarf - small radius, small mass           - cratery, small    - purpley grey
 ]
 
-temp_colors = [
-    "white",
-    "magenta",
-    "green",
-    "blue",
-    "indigo"
-]
+p0colors = ["green", "blue", "cyan", "indigo", "darkgreen"]
+p1colors = ["red", "orange", "magenta", "yellow", "purple"]
 
 #types:
 # cratery
