@@ -93,27 +93,47 @@ class GameFuncs():
 
     clickDifference: tuple
     movingLauncher: bool = False
+    movingArrow: bool = False
     @classmethod
     def controlLauncher(cls):
         """Called when in Control Launcher Mode"""
-        if not cls.movingLauncher:
+
+        if not cls.movingLauncher and not cls.movingArrow:
             #Check if starting to move launcher
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
             
-                if State.launcher.rect.collidepoint(mousepos):
+                if State.launcher.iLaunchRect.collidepoint(mousepos):
                     cls.movingLauncher = True
                     cls.clickDifference = (State.launcher.rect.x - mousepos.x, State.launcher.rect.y - mousepos.y)
                 
-        else: #launcher is moving
+                if State.launcher.iArrowRect.collidepoint(mousepos):
+                    print("Click Arrow")
+                    cls.movingArrow = True
+                    cls.clickDifference = (State.launcher.iArrowRect.x - mousepos.x, State.launcher.iArrowRect.y - mousepos.y)
+                
+        elif cls.movingLauncher: #launcher is moving
             mousepos = pg.Vector2(pg.mouse.get_pos())
 
             State.launcher.rect.x = mousepos.x + cls.clickDifference[0]
 
             if not pg.mouse.get_pressed()[0]:
                 cls.movingLauncher = False
+        
+        elif cls.movingArrow: #arrow is moving
+            mousepos = pg.Vector2(pg.mouse.get_pos())
 
-        State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2, State.launcher.rect.centery, config.playFieldWidth, 0))
+
+            State.launcher.iArrowRect.x = mousepos.x + cls.clickDifference[0]
+            State.launcher.iArrowRect.x = mousepos.y + cls.clickDifference[1]
+
+            print(State.launcher.iArrowRect)
+
+            if not pg.mouse.get_pressed()[0]:
+                cls.movingArrow = False
+
+        State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2-State.launcher.rect.width/2, State.launcher.rect.centery, config.playFieldWidth+State.launcher.rect.width, 0))
+        
 
     marker: pg.sprite.Sprite = None
     missile: Missile = None
