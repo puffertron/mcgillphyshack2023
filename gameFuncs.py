@@ -1,5 +1,6 @@
 import pygame as pg
 from pygame import Vector2
+from pygame import gfxdraw
 import bodies
 from missile import Missile
 from launcher import Launcher
@@ -23,6 +24,10 @@ class GameFuncs():
             #Check if starting to move planet
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
+                flippedMousePos = pg.Vector2(
+                        (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+                        (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+                    )
 
                 if State.chosenPlanet == None:
                     planetsToCheck = State.planetGroups[State.activePlayer] #Can click on any planet if none chosen yet
@@ -31,22 +36,26 @@ class GameFuncs():
 
                 for planet in planetsToCheck:
                     #For each planet, see if clicking on planet
-                    positionInMask = mousepos.x - planet.rect.x, mousepos.y - planet.rect.y
-                    if planet.rect.collidepoint(mousepos) and planet.mask.get_at(positionInMask):
+                    positionInMask = flippedMousePos.x - planet.rect.x, flippedMousePos.y - planet.rect.y
+                    if planet.rect.collidepoint(flippedMousePos) and planet.mask.get_at(positionInMask):
                         State.chosenPlanet = planet
                         cls.planetActivelyMoving = True
-                        cls.clickDifference = (State.chosenPlanet.rect.x - mousepos.x, State.chosenPlanet.rect.y - mousepos.y)
+                        cls.clickDifference = (State.chosenPlanet.rect.x - flippedMousePos.x, State.chosenPlanet.rect.y - flippedMousePos.y)
                         break
 
         else: #planet is chosen and moving
             mousepos = pg.Vector2(pg.mouse.get_pos())
+            flippedMousePos = pg.Vector2(
+                        (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+                        (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+                    )
 
             #Move planet
             # targetx = mousepos.x + cls.clickDifference[0]
             # targety = mousepos.y + cls.clickDifference[1]
 
-            State.chosenPlanet.rect.x = mousepos.x + cls.clickDifference[0]
-            State.chosenPlanet.rect.y = mousepos.y + cls.clickDifference[1]
+            State.chosenPlanet.rect.x = flippedMousePos.x + cls.clickDifference[0]
+            State.chosenPlanet.rect.y = flippedMousePos.y + cls.clickDifference[1]
             
             #collision
             resolution = pg.Vector2()
@@ -79,8 +88,8 @@ class GameFuncs():
                     point1, point2 = intersectTwoCircles(bodyB.rect.centerx, bodyB.rect.centery, radiusAB, 
                                         bodyC.rect.centerx, bodyC.rect.centery, radiusAC)
                     
-                    dist1 = point1 - mousepos
-                    dist2 = point2 - mousepos
+                    dist1 = point1 - flippedMousePos
+                    dist2 = point2 - flippedMousePos
 
                     #choose between the 2 points
                     if dist1.length() < dist2.length():
@@ -95,26 +104,50 @@ class GameFuncs():
 
             if not pg.mouse.get_pressed()[0]:
                 cls.planetActivelyMoving = False
+                if State.startOfGameFreeMovement: #For free movement resets to allow any planet movement
+                    State.chosenPlanet = None
                 State.readyForBuffer = True
+                #TODO - could add processing and visualization of U equipotential lines here
 
     clickDifference: tuple
     movingLauncher: bool = False
     @classmethod
     def controlLauncher(cls):
         """Called when in Control Launcher Mode"""
+
         if not cls.movingLauncher:
             #Check if starting to move launcher
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
+                flippedMousePos = pg.Vector2(
+                        (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+                        (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+                    )
             
-                if State.launcher.rect.collidepoint(mousepos):
+                if State.launcher.rect.collidepoint(flippedMousePos):
                     cls.movingLauncher = True
-                    cls.clickDifference = (State.launcher.rect.x - mousepos.x, State.launcher.rect.y - mousepos.y)
+                    cls.clickDifference = (State.launcher.rect.x - flippedMousePos.x, State.launcher.rect.y - flippedMousePos.y)
+
+                elif State.playrects[State.inactivePlayer].collidepoint(flippedMousePos):
+                    if State.crosshairs[State.activePlayer] == None:
+                        # create crosshair
+                        State.crosshairs[State.activePlayer] = pg.sprite.Sprite()
+                        State.launchGroups[State.activePlayer].add(State.crosshairs[State.activePlayer])
+                        State.crosshairs[State.activePlayer].image = pg.Surface((config.crosshairRadius*2, config.crosshairRadius*2))
+                        State.crosshairs[State.activePlayer].rect = State.crosshairs[State.activePlayer].image.get_rect()
+                        gfxdraw.circle(State.crosshairs[State.activePlayer].image, config.crosshairRadius, config.crosshairRadius, config.crosshairRadius, (255,255,255))
+
+                    State.crosshairs[State.activePlayer].rect.x = flippedMousePos.x - config.crosshairRadius
+                    State.crosshairs[State.activePlayer].rect.y = flippedMousePos.y - config.crosshairRadius
                 
         else: #launcher is moving
             mousepos = pg.Vector2(pg.mouse.get_pos())
+            flippedMousePos = pg.Vector2(
+                        (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+                        (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+                    )
 
-            State.launcher.rect.x = mousepos.x + cls.clickDifference[0]
+            State.launcher.rect.x = flippedMousePos.x + cls.clickDifference[0]
 
             if not pg.mouse.get_pressed()[0]:
                 cls.movingLauncher = False

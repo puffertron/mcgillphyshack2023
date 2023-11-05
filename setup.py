@@ -13,10 +13,10 @@ def setupGameArea():
     State.bgGroup.add(player0Area, player1Area)
     #top
     player0Area.rect.x = config.leftOfPlayField
-    player0Area.rect.y = config.topOfPlayField
+    player0Area.rect.y = player1Area.rect.height + config.topOfPlayField
     #bottom
     player1Area.rect.x = config.leftOfPlayField
-    player1Area.rect.y = player1Area.rect.height + config.topOfPlayField
+    player1Area.rect.y = config.topOfPlayField
 
     State.playrects = [player0Area.rect, player1Area.rect]
 
@@ -50,8 +50,8 @@ def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
     
     if randpos:
         #Randomize position
-        newPlanet.randomizePosition(pg.Vector2(config.leftOfPlayField, config.topOfPlayField + (config.topOfPlayField * owner)),
-                                    pg.Vector2(config.playFieldWidth, config.playFieldHeight))
+        newPlanet.randomizePosition(pg.Vector2(config.leftOfPlayField, config.topOfPlayField + (config.topOfPlayField * int(not bool(owner)))),
+                                    pg.Vector2(config.leftOfPlayField + config.playFieldWidth, config.topOfPlayField + (config.topOfPlayField * int(not bool(owner))) + config.playFieldHeight))
     
     #TODO - should get position in correct position for given player
     if pos:
