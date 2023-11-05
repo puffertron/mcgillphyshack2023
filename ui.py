@@ -93,13 +93,14 @@ class Button(pg.sprite.Sprite):
     def __init__(self, callback, pos:pg.Vector2, text, color=pg.color.Color(155, 155, 155)):
         pg.sprite.Sprite.__init__(self)
         self.image = pg.surface.Surface((60,20))
-        self.image.fill(color)
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = pos.x, pos.y
+        self.color = color
+        self.image.fill(self.color)
+        self.rect = pg.Rect(pos.x, pos.y, self.image.get_width(), self.image.get_height())
         self.callback = callback
         self.font = pg.freetype.SysFont(pg.freetype.get_default_font(), 12)
         self.text = text
-        self.font.render_to(self.image, self.rect, self.text) #TODO - fix position of text
+        fontimg, fontrect =self.font.render(self.text)
+        self.image.blit(fontimg, fontrect) 
         self.mousedown = [0,0]
     
     def onclick(self):
@@ -108,7 +109,9 @@ class Button(pg.sprite.Sprite):
     
     def updateText(self, text):
         self.text = text
-        self.font.render_to(self.image, self.rect, text)
+        fontimg, fontrect =self.font.render(self.text)
+        self.image.fill(self.color)
+        self.image.blit(fontimg, fontrect)
 
     def onhover(self):
         pass
