@@ -16,9 +16,12 @@ gravity = -1
 missileRadius = 5
 markerSize = 6
 
-yposLauncher = 10
-launchArrowRadius = 100
-launchVelocityMod = 10
+# Launcher Position things
+launchLine = 20 # from edge of screen
+launcherRadius = 10 # drawn launcher object radius
+arrowAreaRadius = 100 # area from launcher that the arrow is allowed to go
+arrowheadRadius = 5
+
 
 crosshairRadius = 15
 

@@ -29,6 +29,15 @@ def setupBackgrounds():
     bg.image = pg.transform.smoothscale(bg.image, (config.windowWidth, config.windowHeight))
     bg.rect = pg.Rect(0, 0, config.windowWidth, config.windowHeight)
 
+    bgborder = effects.ScrollSprite()
+    bgborder.image = pg.Surface((config.windowWidth, config.windowHeight))
+    bgborder.mask = State.assetbank.BG_ART[1]
+    bgborder.mask = pg.transform.smoothscale(bgborder.mask,(config.windowWidth, config.windowHeight))
+    bgborder.scrolltexture = State.assetbank.BG_ART[2]
+
+    #State.bgGroup.add(bgborder)
+
+
 def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
     """Makes a planet and adds to proper group, randomizes position inside player region"""
     #Make planet

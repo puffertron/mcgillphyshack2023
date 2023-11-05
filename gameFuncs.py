@@ -111,11 +111,13 @@ class GameFuncs():
 
     clickDifference: tuple
     movingLauncher: bool = False
+    movingArrow: bool = False
     @classmethod
     def controlLauncher(cls):
         """Called when in Control Launcher Mode"""
 
-        if not cls.movingLauncher:
+
+        if not cls.movingLauncher and not cls.movingArrow:
             #Check if starting to move launcher
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
@@ -124,10 +126,16 @@ class GameFuncs():
                         (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
                     )
             
-                if State.launcher.rect.collidepoint(flippedMousePos):
+                if State.launcher.iLaunchRect.collidepoint(flippedMousePos):
                     cls.movingLauncher = True
                     cls.clickDifference = (State.launcher.rect.x - flippedMousePos.x, State.launcher.rect.y - flippedMousePos.y)
 
+                
+                elif State.launcher.iArrowRect.collidepoint(flippedMousePos):
+                    print("Click Arrow")
+                    cls.movingArrow = True
+                    cls.clickDifference = (State.launcher.iArrowRect.x - mousepos.x, State.launcher.iArrowRect.y - mousepos.y)
+                
                 elif State.playrects[State.inactivePlayer].collidepoint(flippedMousePos):
                     if State.crosshairs[State.activePlayer] == None:
                         # create crosshair
@@ -140,7 +148,7 @@ class GameFuncs():
                     State.crosshairs[State.activePlayer].rect.x = flippedMousePos.x - config.crosshairRadius
                     State.crosshairs[State.activePlayer].rect.y = flippedMousePos.y - config.crosshairRadius
                 
-        else: #launcher is moving
+        elif cls.movingLauncher: #launcher is moving
             mousepos = pg.Vector2(pg.mouse.get_pos())
             flippedMousePos = pg.Vector2(
                         (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
@@ -151,8 +159,21 @@ class GameFuncs():
 
             if not pg.mouse.get_pressed()[0]:
                 cls.movingLauncher = False
+        
+        elif cls.movingArrow: #arrow is moving
+            mousepos = pg.Vector2(pg.mouse.get_pos())
 
-        State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2, State.launcher.rect.centery, config.playFieldWidth, 0))
+
+            State.launcher.iArrowRect.x = mousepos.x + cls.clickDifference[0]
+            State.launcher.iArrowRect.x = mousepos.y + cls.clickDifference[1]
+
+            print(State.launcher.iArrowRect)
+
+            if not pg.mouse.get_pressed()[0]:
+                cls.movingArrow = False
+
+        State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2-State.launcher.rect.width/2, State.launcher.rect.centery, config.playFieldWidth+State.launcher.rect.width, 0))
+        
 
     marker: pg.sprite.Sprite = None
     missile: Missile = None
@@ -176,9 +197,10 @@ class GameFuncs():
             cls.missile.kill()
             cls.missile = None
 
-            State.movingPlanetsMode = True
-            State.missileLaunchedMode = False
-            State.switchPlayer()
+            # State.movingPlanetsMode = True
+            # State.missileLaunchedMode = False
+            # State.switchPlayer()
+            ui.switchModeFromExplodingMissile()
             return
 
         # Update Missile Position
@@ -203,9 +225,10 @@ class GameFuncs():
                 cls.missile.kill()
                 cls.missile = None
 
-                State.movingPlanetsMode = True
-                State.missileLaunchedMode = False
-                State.switchPlayer()
+                # State.movingPlanetsMode = True
+                # State.missileLaunchedMode = False
+                # State.switchPlayer()
+                ui.switchModeFromExplodingMissile()
                 return
 
             # x position of marker
