@@ -2,6 +2,7 @@ import pygame as pg
 from typing import List
 from bodies import Planet
 from launcher import Launcher
+import assets
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -15,7 +16,11 @@ class State:
     planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p0Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p1Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
+    p0LaunchGroup = pg.sprite.Group()
+    p1LaunchGroup = pg.sprite.Group()
     launcher: Launcher = None
+    p0crosshair: pg.sprite.Sprite = None
+    p1crosshair: pg.sprite.Sprite = None
     p0Group: pg.sprite.Group = pg.sprite.Group()
     p1Group: pg.sprite.Group = pg.sprite.Group()
     passGroup: pg.sprite.Group = pg.sprite.Group()
@@ -32,16 +37,28 @@ class State:
     #group for bg
     bgGroup: pg.sprite.Group = pg.sprite.Group()
 
-    playrects = []
+    playrects: list[pg.Rect] = []
 
+    launchGroups = [p0LaunchGroup, p1LaunchGroup]
     playerGroups = [p0Group, p1Group, passGroup]
     planetGroups = [p0Planets, p1Planets]
-    
+    crosshairs = [p0crosshair, p1crosshair]
+
+
+    #Different game states
     movingPlanetsMode = False
+    chosenPlanet = None
     aimingMissileMode = False
     missileLaunchedMode = False
     readyForBufferMode = False
     bufferMode = False
+    
+    #Some vars for specific game states
+    chosenPlanet:Planet = None #Set when moving, set to none at start of moving phase
+    startOfGameFreeMovement = True #Allows free movement of all planets on side (not locked to one planet) for start of game
+    
+
+    assetbank = assets
 
     def switchPlayer():
         #Does switch based on what inactive player was

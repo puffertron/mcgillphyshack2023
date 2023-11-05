@@ -23,14 +23,19 @@ arrowAreaRadius = 100 # area from launcher that the arrow is allowed to go
 arrowheadRadius = 5
 
 
-# Default Planet Attributes - tuples of (radius, mass)
+crosshairRadius = 15
+
+crosshairRadius = 15
+
+# Default Planet Attributes - tuples of (radius, mass, type)
 default_planets = [
-    (5, 800),  # neutron star - tiny radius, large mass     - NEUTRON STAR      - white
-    (100, 90), # gas giant - large radius, tiny mass        - gassy, large      - pinkish
-    (30, 150), # terrestrial - medium radius, medium mass   - cratery, medium   - greeny
-    (40, 120), # mini-neptune - medium radius, medium mass  - gassy, medium     - blue/purple
-    (15, 40)   # dwarf - small radius, small mass           - cratery, small    - purpley grey
+    (5, 800, 3),  # neutron star - tiny radius, large mass     - NEUTRON STAR      - white
+    (100, 90, 1), # gas giant - large radius, tiny mass        - gassy, large      - pinkish
+    (30, 150, 4), # terrestrial - medium radius, medium mass   - cratery, medium   - greeny
+    (40, 120, 2), # mini-neptune - medium radius, medium mass  - gassy, medium     - blue/purple
+    (15, 40, 0)   # dwarf - small radius, small mass           - cratery, small    - purpley grey
 ]
+
 
 p0colors = ["green", "blue", "cyan", "indigo", "darkgreen"]
 p1colors = ["red", "orange", "magenta", "yellow", "purple"]

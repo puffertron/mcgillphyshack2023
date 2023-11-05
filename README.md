@@ -13,4 +13,5 @@ IMPORTANT:
 - add cool font
 
 ## Known Issues
-Intersections with more than 3 planets will not be properly resolved
+- Intersections with more than 3 planets will not be properly resolved
+- Intersection is able to crash in some cases (mostly only if right near edge or very large planets, only for many bodies in very clsoe area)
