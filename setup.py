@@ -65,11 +65,11 @@ def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
 def makePlanetsFixed(spacing):
 
     for i in range(0,5):
-        pos = pg.Vector2(i*spacing + 100, 200)
+        pos = pg.Vector2(i*spacing + 100, 400)
         makePlanet(config.default_planets[i][0],config.default_planets[i][1],
         config.default_planets[i][2], 0, False, pos)
 
     for i in range(0,5):
-        pos = pg.Vector2(i*spacing + 100, 400)
+        pos = pg.Vector2(i*spacing + 100, 200)
         makePlanet(config.default_planets[i][0],config.default_planets[i][1],
         config.default_planets[i][2], 1, False, pos)

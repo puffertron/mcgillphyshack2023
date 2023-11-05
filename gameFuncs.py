@@ -239,7 +239,7 @@ class GameFuncs():
             if distSquared <= minDist**2:
                 print("switched due to collision")
                 #TODO collision stuff
-                if planet in State.planetGroups[State.inactivePlayer]:
+                if planet in State.planetGroups[State.inactivePlayer] and State.crosshairs[State.activePlayer].rect.collidepoint(cls.missile.rect.center):
                     planet.kill()
                     print("killed enemy planet! with radius " + str(planet.radius))
 
