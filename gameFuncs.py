@@ -223,8 +223,6 @@ class GameFuncs():
         """Called when in Shooting mode"""
         #TODO - make launcher here and add to group if just started
         #TODO - destroy
-
-        print(cls.missile)
         # Define our Missile and group it
         if cls.missile == None:
             print("missile was created!")
