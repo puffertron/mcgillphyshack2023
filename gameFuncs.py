@@ -9,6 +9,7 @@ import config
 import math
 import ui
 import time
+import numpy as np
 
 class GameFuncs():
     """Funcs for different game modes, func will be called each frame"""
@@ -111,68 +112,105 @@ class GameFuncs():
 
     clickDifference: tuple
     movingLauncher: bool = False
-    movingArrow: bool = False
     @classmethod
     def controlLauncher(cls):
         """Called when in Control Launcher Mode"""
 
-
-        if not cls.movingLauncher and not cls.movingArrow:
-            #Check if starting to move launcher
-            if pg.mouse.get_pressed()[0]:
-                mousepos = pg.Vector2(pg.mouse.get_pos())
-                flippedMousePos = pg.Vector2(
-                        (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
-                        (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
-                    )
+        if not cls.movingLauncher and pg.mouse.get_pressed()[0]:
+            mousepos = pg.Vector2(pg.mouse.get_pos())
+            flippedMousePos = pg.Vector2(
+                    (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+                    (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+            )
             
-                if State.launcher.iLaunchRect.collidepoint(flippedMousePos):
+            if State.launchers[State.activePlayer].rect.collidepoint(flippedMousePos):
+                if pg.mouse.get_pressed()[0]:
                     cls.movingLauncher = True
-                    cls.clickDifference = (State.launcher.rect.x - flippedMousePos.x, State.launcher.rect.y - flippedMousePos.y)
+                    cls.clickDifference = (State.launchers[State.activePlayer].rect.x - flippedMousePos.x, State.launchers[State.activePlayer].rect.y - flippedMousePos.y)
+
+            if State.playrects[State.inactivePlayer].collidepoint(flippedMousePos):
+                if State.crosshairs[State.activePlayer] == None:
+                    # create crosshair
+                    State.crosshairs[State.activePlayer] = pg.sprite.Sprite()
+                    State.launchGroups[State.activePlayer].add(State.crosshairs[State.activePlayer])
+                    State.crosshairs[State.activePlayer].image = pg.Surface((config.crosshairRadius*2, config.crosshairRadius*2))
+                    State.crosshairs[State.activePlayer].rect = State.crosshairs[State.activePlayer].image.get_rect()
+                    gfxdraw.circle(State.crosshairs[State.activePlayer].image, config.crosshairRadius, config.crosshairRadius, config.crosshairRadius, (255,255,255))
+
+                State.crosshairs[State.activePlayer].rect.x = flippedMousePos.x - config.crosshairRadius
+                State.crosshairs[State.activePlayer].rect.y = flippedMousePos.y - config.crosshairRadius
+
+            #Check if starting to move launcher
+            # if pg.mouse.get_pressed()[0]:
+            #     mousepos = pg.Vector2(pg.mouse.get_pos())
+            #     flippedMousePos = pg.Vector2(
+            #             (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+            #             (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+            #         )
+            
+            #     if State.launcher.iLaunchRect.collidepoint(flippedMousePos):
+            #         cls.movingLauncher = True
+            #         cls.clickDifference = (State.launcher.rect.x - flippedMousePos.x, State.launcher.rect.y - flippedMousePos.y)
 
                 
-                elif State.launcher.iArrowRect.collidepoint(flippedMousePos):
-                    print("Click Arrow")
-                    cls.movingArrow = True
-                    cls.clickDifference = (State.launcher.iArrowRect.x - mousepos.x, State.launcher.iArrowRect.y - mousepos.y)
+            #     elif State.launcher.iArrowRect.collidepoint(flippedMousePos):
+            #         print("Click Arrow")
+            #         cls.movingArrow = True
+            #         cls.clickDifference = (State.launcher.iArrowRect.x - flippedMousePos.x, State.launcher.iArrowRect.y - flippedMousePos.y)
                 
-                elif State.playrects[State.inactivePlayer].collidepoint(flippedMousePos):
-                    if State.crosshairs[State.activePlayer] == None:
-                        # create crosshair
-                        State.crosshairs[State.activePlayer] = pg.sprite.Sprite()
-                        State.launchGroups[State.activePlayer].add(State.crosshairs[State.activePlayer])
-                        State.crosshairs[State.activePlayer].image = pg.Surface((config.crosshairRadius*2, config.crosshairRadius*2))
-                        State.crosshairs[State.activePlayer].rect = State.crosshairs[State.activePlayer].image.get_rect()
-                        gfxdraw.circle(State.crosshairs[State.activePlayer].image, config.crosshairRadius, config.crosshairRadius, config.crosshairRadius, (255,255,255))
+            #     elif State.playrects[State.inactivePlayer].collidepoint(flippedMousePos):
+            #         if State.crosshairs[State.activePlayer] == None:
+            #             # create crosshair
+            #             State.crosshairs[State.activePlayer] = pg.sprite.Sprite()
+            #             State.launchGroups[State.activePlayer].add(State.crosshairs[State.activePlayer])
+            #             State.crosshairs[State.activePlayer].image = pg.Surface((config.crosshairRadius*2, config.crosshairRadius*2))
+            #             State.crosshairs[State.activePlayer].rect = State.crosshairs[State.activePlayer].image.get_rect()
+            #             gfxdraw.circle(State.crosshairs[State.activePlayer].image, config.crosshairRadius, config.crosshairRadius, config.crosshairRadius, (255,255,255))
 
-                    State.crosshairs[State.activePlayer].rect.x = flippedMousePos.x - config.crosshairRadius
-                    State.crosshairs[State.activePlayer].rect.y = flippedMousePos.y - config.crosshairRadius
+            #         State.crosshairs[State.activePlayer].rect.x = flippedMousePos.x - config.crosshairRadius
+            #         State.crosshairs[State.activePlayer].rect.y = flippedMousePos.y - config.crosshairRadius
                 
         elif cls.movingLauncher: #launcher is moving
             mousepos = pg.Vector2(pg.mouse.get_pos())
             flippedMousePos = pg.Vector2(
-                        (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
-                        (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
-                    )
+                    (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+                    (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+            )
 
-            State.launcher.rect.x = flippedMousePos.x + cls.clickDifference[0]
+            State.launchers[State.activePlayer].rect.x = np.clip(
+                flippedMousePos.x + cls.clickDifference[0],
+                config.windowWidth/2-config.playFieldWidth/2,
+                config.windowWidth/2+config.playFieldWidth/2)
+            #State.launcher.iLaunchRect.x = flippedMousePos.x + cls.clickDifference[0]
+
+            State.launchers[State.activePlayer].speed = np.clip((State.launchers[State.activePlayer].rect.centery - flippedMousePos.y)*(-1)**(State.activePlayer), 0, config.maxLaunchSpeed)
+
+            print(State.launchers[State.activePlayer].speed)
 
             if not pg.mouse.get_pressed()[0]:
                 cls.movingLauncher = False
         
-        elif cls.movingArrow: #arrow is moving
-            mousepos = pg.Vector2(pg.mouse.get_pos())
+        # elif cls.movingArrow: #arrow is moving
+        #     mousepos = pg.Vector2(pg.mouse.get_pos())
+        #     flippedMousePos = pg.Vector2(
+        #                 (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
+        #                 (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
+        #             )
 
+        #     State.launcher.iArrowRect.x = flippedMousePos.x + cls.clickDifference[0]
+        #     State.launcher.iArrowRect.x = flippedMousePos.y + cls.clickDifference[1]
 
-            State.launcher.iArrowRect.x = mousepos.x + cls.clickDifference[0]
-            State.launcher.iArrowRect.x = mousepos.y + cls.clickDifference[1]
+        #     print(State.launcher.iArrowRect)
 
-            print(State.launcher.iArrowRect)
+        #     if not pg.mouse.get_pressed()[0]:
+        #         cls.movingArrow = False
 
-            if not pg.mouse.get_pressed()[0]:
-                cls.movingArrow = False
-
-        State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2-State.launcher.rect.width/2, State.launcher.rect.centery, config.playFieldWidth+State.launcher.rect.width, 0))
+        # State.launcher.rect.clamp_ip(pg.Rect(
+        #     config.windowWidth/2-config.playFieldWidth/2-State.launcher.rect.width/2, 
+        #     State.launcher.rect.centery, 
+        #     config.playFieldWidth+State.launcher.rect.width, 
+        #     0))
+        
         
 
     marker: pg.sprite.Sprite = None

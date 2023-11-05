@@ -14,6 +14,8 @@ running = True
 #setup scene
 setup.setupBackgrounds()
 setup.setupGameArea()
+State.p0LaunchGroup.add(State.p0Launcher)
+State.p1LaunchGroup.add(State.p1Launcher)
 
 #Make planets
 # setup.makePlanetsRandom()
@@ -37,10 +39,6 @@ while running:
                 State.missileLaunchedMode = False
             elif event.unicode == "f":
                 State.aimingMissileMode = True
-                launcher = Launcher(State.activePlayer)
-                State.launcher = launcher
-                State.playerGroups[State.activePlayer].add(launcher)
-
             #TODO - add detection of button clicks for changing modes
             
                     

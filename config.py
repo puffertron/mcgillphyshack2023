@@ -23,8 +23,7 @@ arrowAreaRadius = 100 # area from launcher that the arrow is allowed to go
 arrowheadRadius = 5
 
 
-crosshairRadius = 15
-
+maxLaunchSpeed = 60
 crosshairRadius = 15
 
 # Default Planet Attributes - tuples of (radius, mass, type)

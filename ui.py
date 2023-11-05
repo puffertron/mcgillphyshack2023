@@ -2,7 +2,6 @@ import pygame as pg
 from state import State
 import config
 from typing import List
-from launcher import Launcher
 #Controls buttons and boxes with info, also controls changing between modes (since mostly controlled by buttons)
 #Note: Would be nice to figure out a better place for things to be handling the state changes, they don't really belong here
 
@@ -74,11 +73,6 @@ def enterAimingMissileMode():
     State.button1.callback = enterMissileSimulationMode
     State.button2.updateText("button 2")
     State.button2.callback = print #TODO should make this something useless
-
-    #TEMP - should do in missile.py
-    launcher = Launcher(State.activePlayer)
-    State.launcher = launcher
-    State.playerGroups[State.activePlayer].add(launcher)
 
 def enterMissileSimulationMode():
     #Goes from aiming to simulating missile - when explodes calls next function
