@@ -15,14 +15,16 @@ def makeButtons():
     #TODO Make buttons that look pretty
 
     #Make announcement bar
-    # annBar = TextBox(pos=(10,10), size=(200,60), text="Welcome to the game!")
-    # State.announcementBar = annBar
-    # State.UIGroup.add(annBar)
+    annBar = TextBox(pos=pg.Vector2(10,10), size=(400,30), text="Welcome to the game!")
+    State.announcementBar = annBar
+    State.UIGroup.add(annBar)
+    
 
 
 def startBegPlayerMovement(): #TEMP maybe? Not sure how to do starting stuff
     #Starts first player placement
     State.movingPlanetsMode = True
+    State.announcementBar.updateText("Drag your planets into position")
     State.button1.updateText("go to buffer")
     State.button1.callback = enterStartBufferMode
     State.button2.updateText("button2")
@@ -30,6 +32,7 @@ def startBegPlayerMovement(): #TEMP maybe? Not sure how to do starting stuff
 
 def enterStartBufferMode(): #TEMP maybe? Not sure how to do starting stuff
     State.activePlayer = 2 #Sets to no active player so nothing revealed during computer switch
+    State.announcementBar.updateText("Pass the computer to the otehr player")
     State.movingPlanetsMode = False
     State.bufferMode = True
     State.button1.updateText("place next planets")
@@ -41,6 +44,7 @@ def enterStartBufferMode(): #TEMP maybe? Not sure how to do starting stuff
 def startSecondBegPlayerMovement(): #TEMP maybe? Not sure how to do starting stuff
     State.switchPlayer()
     State.movingPlanetsMode = True
+    State.announcementBar.updateText("Drag your planets into position")
     State.button1.updateText("go to buffer")
     State.button1.callback = enterBufferMode
     State.button2.updateText("button2")
@@ -53,6 +57,7 @@ def test():
 def startNewTurn():
     #starts turn showing options for turn, also switches player
     State.switchPlayer()
+    State.announcementBar.updateText("Choose an action")
     State.movingPlanetsMode = False #Just to make sure state is correct, shouldn't change anything, mostly for debugging right now
     State.button1.updateText("move planet")
     State.button1.callback = enterMovePlanetMode
@@ -62,6 +67,7 @@ def startNewTurn():
 def enterMovePlanetMode():
     #Goes to moving planet mode from initial mode
     #TODO - deactivate first mode state
+    State.announcementBar.updateText("Drag ONE planet")
     State.chosenPlanet = None
     State.movingPlanetsMode = True
     State.button1.updateText("go to buffer")
@@ -71,6 +77,7 @@ def enterMovePlanetMode():
 
 def enterAimingMissileMode():
     #Goes to aiming from turn choice
+    State.announcementBar.updateText("place crosshair on opponnent's side. Move ship, height controls velocity")
     State.aimingMissileMode = True
     State.button1.updateText("launch missile")
     State.button1.callback = enterMissileSimulationMode
@@ -79,18 +86,21 @@ def enterAimingMissileMode():
 
 def enterMissileSimulationMode():
     #Goes from aiming to simulating missile - when explodes calls next function
+    State.announcementBar.updateText("Where are your opponent's planets?")
     if not State.crosshairs[State.activePlayer] == None:
         State.aimingMissileMode = False
         State.missileLaunchedMode = True
 
 def switchModeFromExplodingMissile():
     State.missileLaunchedMode = False
+    #TODO - add announcement based on case
     #TODO - maybe go to nice new mode to show things nicely?
     State.button1.updateText("go to buffer")
     State.button1.callback = enterBufferMode
 
 def enterBufferMode():
     #Go to buffer mode, should then pass to other player
+    State.announcementBar.updateText("Pass the computer to the otehr player")
     State.startOfGameFreeMovement = False #Only needs to be run once first time this is run, this is the only toggle, silly to be here
     State.activePlayer = 2 #Sets to no active player so nothing revealed during computer switch
     State.missileLaunchedMode = False
@@ -153,7 +163,8 @@ class TextBox(pg.sprite.Sprite):
         self.image = pg.surface.Surface(size)
         self.image.fill(backColor)
         self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = pos.x, pos.y
+        self.rect.x = pos.x
+        self.rect.y = pos.y
         self.font = pg.freetype.SysFont(pg.freetype.get_default_font(), 12)
         self.text = text
         self.font.render_to(self.image, self.rect, self.text) #TODO - fix position of text
