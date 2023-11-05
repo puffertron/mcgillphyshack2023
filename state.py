@@ -3,6 +3,8 @@ from typing import List
 from bodies import Planet
 from launcher import Launcher
 import assets
+import numpy as np
+import config
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -54,7 +56,7 @@ class State:
     assetbank = assets
 
     #potential matrix for current planet configuration
-    potentialMatrix = None #TODO - what is type
+    potentialMatrix = np.zeros(shape=(config.playFieldWidth,config.playFieldHeight))
 
     def switchPlayer():
         #Does switch based on what inactive player was
