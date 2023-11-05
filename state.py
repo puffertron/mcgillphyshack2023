@@ -37,11 +37,17 @@ class State:
     playerGroups = [p0Group, p1Group, passGroup]
     planetGroups = [p0Planets, p1Planets]
     
+    #Different game states
     movingPlanetsMode = False
+    chosenPlanet = None
     aimingMissileMode = False
     missileLaunchedMode = False
     readyForBufferMode = False
     bufferMode = False
+    
+    #Some vars for specific game states
+    chosenPlanet:Planet = None #Set when moving, set to none at start of moving phase
+    
 
     def switchPlayer():
         #Does switch based on what inactive player was

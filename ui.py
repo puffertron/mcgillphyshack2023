@@ -44,6 +44,7 @@ def startNewTurn():
 def enterMovePlanetMode():
     #Goes to moving planet mode from initial mode
     #TODO - deactivate first mode state
+    State.chosenPlanet = None
     State.movingPlanetsMode = True
     State.button1.updateText("go to buffer")
     State.button1.callback = enterBufferMode #Iffy to set this button already
@@ -76,11 +77,9 @@ def switchModeFromExplodingMissile():
 
 def enterBufferMode():
     #Go to buffer mode, should then pass to other player
-    if State.movingPlanetsMode == True:
-        #Player needs to move planet before going to next phase, would be good to tell them that somehow
-        return
     State.activePlayer = 2 #Sets to no active player so nothing revealed during computer switch
     State.missileLaunchedMode = False
+    State.movingPlanetsMode = False
     State.bufferMode = True
     State.button1.updateText("start turn")
     State.button1.callback = startNewTurn
@@ -92,7 +91,7 @@ class Button(pg.sprite.Sprite):
     
     def __init__(self, callback, pos:pg.Vector2, text, color=pg.color.Color(155, 155, 155)):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.surface.Surface((60,20))
+        self.image = pg.surface.Surface((100,20))
         self.color = color
         self.image.fill(self.color)
         self.rect = pg.Rect(pos.x, pos.y, self.image.get_width(), self.image.get_height())
