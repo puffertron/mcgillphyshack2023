@@ -26,4 +26,4 @@ class Label(pygame.sprite.Sprite):
             self.rect.y = parent.rect.y
 
         
-        
+     

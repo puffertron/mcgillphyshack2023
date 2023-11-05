@@ -1,20 +1,22 @@
-import pygame
-from pygame import Vector2
+import pygame as pg
 from pygame import gfxdraw
 from physics import Kinematics
+from state import State
 
-MISSILE_WIDTH, MISSILE_LENGTH = 10, 20
-
-class Missile(pygame.sprite.Sprite):
-    def __init__(self, initPos, initVel):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((MISSILE_WIDTH, MISSILE_LENGTH))
-        self.image.fill((255, 255, 255))
+class Missile(pg.sprite.Sprite):
+    def __init__(self, radius, initPos, initVel):
+        pg.sprite.Sprite.__init__(self)
+        self.radius = radius
+        self.image = pg.Surface((2 * self.radius, 2 * self.radius))
         self.rect = self.image.get_rect()
+
+        #temp planet circle
+        self.image.fill((0, 0, 0))
         self.image.set_colorkey((0,0,0))
+        gfxdraw.filled_circle(self.image, self.radius, self.radius, self.radius, (255,255,255))
 
         # Define a surface for effects
-        self.effectsScreen = pygame.surface.Surface((600, 800))
+        self.effectsScreen = pg.surface.Surface((600, 800))
         self.effectsScreen.set_colorkey((0, 0, 0))
 
         # Kinematics Variables

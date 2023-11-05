@@ -11,3 +11,5 @@ topOfPlayField = 100
 leftOfPlayField = 100
 
 gravity = -1
+
+missileRadius = 5
