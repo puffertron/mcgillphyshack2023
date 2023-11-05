@@ -1,9 +1,10 @@
 import pygame as pg
 from pygame import gfxdraw
+from physics import Kinematics
 from state import State
 
 class Missile(pg.sprite.Sprite):
-    def __init__(self, radius):
+    def __init__(self, radius, initPos, initVel):
         pg.sprite.Sprite.__init__(self)
         self.radius = radius
         self.image = pg.Surface((2 * self.radius, 2 * self.radius))
@@ -19,35 +20,13 @@ class Missile(pg.sprite.Sprite):
         self.effectsScreen.set_colorkey((0, 0, 0))
 
         # Kinematics Variables
-        self.v = pg.Vector2()
-        self.a = pg.Vector2()
-        self.oldX = [pg.Vector2(self.rect.center)]
-        self.oldXMaxLen = 60
+        self.k = Kinematics(initPos, initVel)
+        # self.k.pos = initPos
+        # self.k.vel = initPos
 
-    def drawtrail(self, screen):
-        # Reset the Screen
-        self.effectsScreen.fill((0, 0, 0))
-        
-        # draw the trail across all saved past positions, decreasing opacity
-        for i in range(-1, -1*len(self.oldX)+1, -1):
-            alpha = round(255*(self.oldXMaxLen+i)/self.oldXMaxLen)
-            gfxdraw.line(self.effectsScreen, int(self.oldX[i].x), int(self.oldX[i].y), int(self.oldX[i-1].x), int(self.oldX[i-1].y), (255, 255, 255, alpha))
-        
-        # Update the effects screen
-        screen.blit(self.effectsScreen, self.effectsScreen.get_rect())
+        self.rect.center = self.k.pos
 
-
-    def acceleleration(self):
-        G = -1
-        a = pg.Vector2() # empty acceleration
-        xm = pg.Vector2(self.rect.center) # position of craft
-        for p in State.planets:
-            xp = pg.Vector2(p.rect.center) # position of planet
-
-            # the contribution of each planet to the acceleration is
-            # Mp * [ (x_diff) x^ + (y_diff) y^ ] / ||r_diff||^3
-            a += p.mass*(xm - xp)/(((xm - xp).length())**3)
-
-        # Multiply by our gravity  
-        a *= G
-        return a
+    def updateKinematics(self, planets):
+        # updates the kinematics values of the missile
+        self.k.nextPosSIE(planets)
+        self.rect.center = self.k.pos
