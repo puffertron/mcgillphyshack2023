@@ -12,5 +12,6 @@ BG_ART = [
     pg.image.load("assets/bg/hack23-bg-base.png"),
     pg.image.load("assets/bg/hack23-bg-border-mask.png"),
     pg.image.load("assets/bg/hack23-bg-border-texture.png"),
-    pg.image.load("assets/bg/hack23-bg-dust-texture.png")  
+    pg.image.load("assets/bg/hack23-bg-dust-texture.png"),
+    pg.image.load("assets/bg/hack23-dust-texture-mask.png"),  
 ]

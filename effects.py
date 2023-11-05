@@ -30,7 +30,7 @@ def scrollY(screenSurf, offsetY):
 
 def realScroll(screensurf, x, y):
     scrollX(screensurf, x)
-    #scrollY(screensurf, y)
+    scrollY(screensurf, y)
 
 class Label(pg.sprite.Sprite):
     def __init__(self, text: str):
@@ -50,9 +50,9 @@ class Label(pg.sprite.Sprite):
             self.rect.y = parent.rect.y
 
         
-class GameArea(pg.sprite.Sprite):
+class GameArea(pg.sprite.DirtySprite):
     def __init__(self, player):
-        pg.sprite.Sprite.__init__(self)
+        pg.sprite.DirtySprite.__init__(self)
         self.rect = pg.rect.Rect(0,0, config.playFieldWidth, config.playFieldHeight)
         self.image = pg.surface.Surface((self.rect.width, self.rect.height))
         self.image.set_alpha(0.2)
@@ -64,25 +64,45 @@ class GameArea(pg.sprite.Sprite):
 
 
 
-class ScrollSprite(pg.sprite.Sprite):
+class ScrollSprite(pg.sprite.DirtySprite):
     def __init__(self, speed=2):
-        pg.sprite.Sprite.__init__(self)
+        pg.sprite.DirtySprite.__init__(self)
         self.scrolltexture: pg.Surface
         self.scrollspeed = speed
         self.mask: pg.Surface
         
 
     def update(self):
-        tmp = self.scrolltexture
-        tmp.fill((0,0,0))
-        tmp.blit(self.scrolltexture, tmp.get_rect())
-        self.scrolltexture = tmp
         self.image.fill((0,0,0))
         self.image.set_colorkey((0,0,0))
 
-        realScroll(self.scrolltexture, -self.scrollspeed, self.scrollspeed)
-        r = pg.Rect(0, 500, config.windowWidth, config.windowHeight-500)
+        realScroll(self.scrolltexture, self.scrollspeed, -self.scrollspeed)
+        self.scrolltexture = pg.transform.smoothscale(self.scrolltexture, (config.windowWidth, config.windowHeight))
+        r = self.image.get_rect()
         blit_mask(self.scrolltexture, self.image, r, self.mask, self.image.get_rect())
         self.rect = self.image.get_rect()
+        
 
+class GlobalEffects(pg.sprite.DirtySprite):
+    def __init__(self, blendmode=0):
+        pg.sprite.DirtySprite().__init__(self)
+        self.blendmode = blendmode
+        self.image = pg.Surface((config.windowWidth, config.windowHeight))
+        self.rect = self.image.get_rect()
+        self.layers = []
+        self.layers.append(pg.Surface((config.windowWidth, config.windowHeight)))
+    
+    def composite(self):
+        for layer in self.layers:
+            self.image.blit(self.layers[i], self.rect)
+    
+    def newlayer(self):
+        new = pg.Surface((config.windowWidth, config.windowHeight))
+        self.layers.append(new)
+        return new
+    
+    def update(self):
+        for layer in self.layers:
+            layer.fill((0,0,0))
+            layer.set_colorkey((0,0,0))
 
