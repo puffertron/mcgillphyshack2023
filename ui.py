@@ -82,8 +82,9 @@ def enterAimingMissileMode():
 
 def enterMissileSimulationMode():
     #Goes from aiming to simulating missile - when explodes calls next function
-    State.aimingMissileMode = False
-    State.missileLaunchedMode = True
+    if not State.crosshairs[State.activePlayer] == None:
+        State.aimingMissileMode = False
+        State.missileLaunchedMode = True
 
 def switchModeFromExplodingMissile():
     State.missileLaunchedMode = False
