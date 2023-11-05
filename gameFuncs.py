@@ -113,6 +113,8 @@ class GameFuncs():
             if not pg.mouse.get_pressed()[0]:
                 cls.movingLauncher = False
 
+        State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2, State.launcher.rect.centery, config.playFieldWidth, 0))
+
     marker: pg.sprite.Sprite = None
     missile: Missile = None
     leftBoundsTime = 0

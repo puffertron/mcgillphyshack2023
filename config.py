@@ -17,6 +17,8 @@ missileRadius = 5
 markerSize = 6
 
 yposLauncher = 10
+launchArrowRadius = 100
+launchVelocityMod = 10
 
 # Default Planet Attributes - tuples of (radius, mass)
 default_planets = [
