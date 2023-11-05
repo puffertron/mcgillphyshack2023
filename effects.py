@@ -22,7 +22,7 @@ class Label(pg.sprite.Sprite):
 class GameArea(pg.sprite.Sprite):
     def __init__(self, player):
         pg.sprite.Sprite.__init__(self)
-        self.rect = pg.rect.Rect(0,0, config.playFieldHeight, config.playFieldWidth)
+        self.rect = pg.rect.Rect(0,0, config.playFieldWidth, config.playFieldHeight)
         self.image = pg.surface.Surface((self.rect.width, self.rect.height))
         self.player = player
         if self.player == 0:
