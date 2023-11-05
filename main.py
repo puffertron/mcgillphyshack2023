@@ -4,6 +4,7 @@ from state import State
 import bodies
 import missile
 from pygame import freetype, color
+import config
 
 pygame.init()
 screen = pygame.display.set_mode((600, 800))
@@ -12,16 +13,11 @@ running = True
 
 
 #Make planets
-State.makePlanet(30,100,pygame.color.Color("green"), 0)
-State.makePlanet(60,800,pygame.color.Color("blue"), 0)
-State.makePlanet(10,90,pygame.color.Color("purple"), 0)
-State.makePlanet(16,500,pygame.color.Color("magenta"), 0)
+for i, (radius, mass) in enumerate(config.default_planets):
+    State.makePlanet(radius, mass, pygame.color.Color(config.temp_colors[i]), 0)
 
-State.makePlanet(30,100,pygame.color.Color("green"), 1)
-State.makePlanet(60,800,pygame.color.Color("blue"), 1)
-State.makePlanet(10,90,pygame.color.Color("purple"), 1)
-State.makePlanet(16,500,pygame.color.Color("magenta"), 1)
-
+for i, (radius, mass) in enumerate(config.default_planets):
+    State.makePlanet(radius, mass, pygame.color.Color(config.temp_colors[i]), 1)
 
 #TEMP
 State.movingPlanetsMode = True
