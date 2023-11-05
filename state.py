@@ -1,6 +1,7 @@
 import pygame as pg
 from typing import List
 from bodies import Planet
+from launcher import Launcher
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -13,8 +14,10 @@ class State:
     planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p0Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p1Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
+    launcher: Launcher = None
     p0Group: pg.sprite.Group = pg.sprite.Group()
     p1Group: pg.sprite.Group = pg.sprite.Group()
+
     passGroup: pg.sprite.Group = pg.sprite.Group()
 
     playerGroups = [p0Group, p1Group, passGroup]

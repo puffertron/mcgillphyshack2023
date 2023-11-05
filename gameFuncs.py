@@ -2,6 +2,7 @@ import pygame as pg
 from pygame import Vector2
 import bodies
 from missile import Missile
+from launcher import Launcher
 from state import State
 import config
 import math
@@ -85,6 +86,28 @@ class GameFuncs():
                 cls.chosenPlanet = None
                 State.movingPlanetsMode = False
                 State.missileLaunchedMode = True
+
+    clickDifference: tuple
+    movingLauncher: bool = False
+    @classmethod
+    def controlLauncher(cls):
+        """Called when in Control Launcher Mode"""
+        if not cls.movingLauncher:
+            #Check if starting to move launcher
+            if pg.mouse.get_pressed()[0]:
+                mousepos = pg.Vector2(pg.mouse.get_pos())
+            
+                if State.launcher.rect.collidepoint(mousepos):
+                    cls.movingLauncher = True
+                    cls.clickDifference = (State.launcher.rect.x - mousepos.x, State.launcher.rect.y - mousepos.y)
+                
+        else: #launcher is moving
+            mousepos = pg.Vector2(pg.mouse.get_pos())
+
+            State.launcher.rect.x = mousepos.x + cls.clickDifference[0]
+
+            if not pg.mouse.get_pressed()[0]:
+                cls.movingLauncher = False
 
     missile: Missile = None
     @classmethod

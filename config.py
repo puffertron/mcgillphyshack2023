@@ -13,3 +13,5 @@ leftOfPlayField = 100
 gravity = -1
 
 missileRadius = 5
+
+yposLauncher = 10

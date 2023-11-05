@@ -21,8 +21,6 @@ class Missile(pg.sprite.Sprite):
 
         # Kinematics Variables
         self.k = Kinematics(initPos, initVel)
-        # self.k.pos = initPos
-        # self.k.vel = initPos
 
         self.rect.center = self.k.pos
 
