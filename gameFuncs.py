@@ -130,6 +130,8 @@ class GameFuncs():
                 cls.missile.kill()
                 cls.missile = None
 
+                State.movingPlanetsMode = True
+                State.missileLaunchedMode = False
                 State.switchPlayer()
                 break
 
