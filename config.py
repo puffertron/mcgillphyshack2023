@@ -5,8 +5,8 @@ import pygame
 windowWidth = 600
 windowHeight = 700
 
-playFieldWidth = 300
-playFieldHeight = 400
+playFieldWidth = 400
+playFieldHeight = 300
 
 topOfPlayField = 50
 leftOfPlayField = 100

@@ -18,7 +18,6 @@ setup.setupGameArea()
 # setup.makePlanetsRandom()
 setup.makePlanetsFixed(40)
 
-
 #TEMP
 State.movingPlanetsMode = True
 

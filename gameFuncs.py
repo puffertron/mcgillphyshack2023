@@ -141,7 +141,7 @@ class GameFuncs():
         cls.missile.updateKinematics(State.planets)
 
         # Check if out of bounds
-        bounds = pg.Rect((0,0,600,800))
+        bounds = pg.Rect(((config.windowWidth - config.playFieldWidth) / 2, (config.windowHeight - 2*config.playFieldHeight) / 2, config.playFieldWidth, 2*config.playFieldHeight))
         if not bounds.collidepoint(cls.missile.rect.center):
             if cls.marker == None:
                 cls.marker = pg.sprite.Sprite(State.playerGroups[State.activePlayer])
