@@ -2,6 +2,7 @@ import pygame as pg
 from typing import List
 from bodies import Planet
 from launcher import Launcher
+import assets
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -42,6 +43,8 @@ class State:
     missileLaunchedMode = False
     readyForBufferMode = False
     bufferMode = False
+
+    assetbank = assets
 
     def switchPlayer():
         #Does switch based on what inactive player was
