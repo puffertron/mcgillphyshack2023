@@ -41,7 +41,7 @@ class Missile(pg.sprite.Sprite):
         G = -1
         a = pg.Vector2() # empty acceleration
         xm = pg.Vector2(self.rect.center) # position of craft
-        for p in State.planetGroups[State.activePlayer]:
+        for p in State.planets:
             xp = pg.Vector2(p.rect.center) # position of planet
 
             # the contribution of each planet to the acceleration is
