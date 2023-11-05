@@ -29,14 +29,37 @@ def setupBackgrounds():
     bg.image = pg.transform.smoothscale(bg.image, (config.windowWidth, config.windowHeight))
     bg.rect = pg.Rect(0, 0, config.windowWidth, config.windowHeight)
 
+    #striped border
     bgborder = effects.ScrollSprite()
     bgborder.image = pg.Surface((config.windowWidth, config.windowHeight))
     bgborder.mask = State.assetbank.BG_ART[1]
     bgborder.mask = pg.transform.smoothscale(bgborder.mask,(config.windowWidth, config.windowHeight))
     bgborder.scrolltexture = State.assetbank.BG_ART[2]
 
-    #State.bgGroup.add(bgborder)
+    #dust
+    bgdust = effects.ScrollSprite()
+    bgdust.image = pg.Surface((config.windowWidth, config.windowHeight))
+    bgdust.image.set_alpha(50)
+    bgdust.mask = State.assetbank.BG_ART[4]
+    bgdust.scrolltexture = State.assetbank.BG_ART[3]
+    bgdust.scrollspeed = -1
 
+    State.bgGroup.add(bgborder, bgdust)
+
+    #asteroids
+    asteroids = effects.ScrollSprite()
+
+def setupEffects():
+    fx1 = effects.GlobalEffects()
+    fx2 = effects.GlobalEffects()
+    fxSpecificPlayers = effects.GlobalEffects()
+    fxSpecificPlayers.newlayer()
+    State.fxGroup.add(fx1)
+    State.fxGroup.add(fx2)
+    State.fxGroup.add(fxSpecificPlayers)
+    State.fx1 = fx1
+    State.fx2 = fx2
+    State.fxSpecificPlayers = fxSpecificPlayers
 
 def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
     """Makes a planet and adds to proper group, randomizes position inside player region"""
@@ -74,11 +97,11 @@ def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
 def makePlanetsFixed(spacing):
 
     for i in range(0,5):
-        pos = pg.Vector2(i*spacing + 100, 200)
+        pos = pg.Vector2(i*spacing + 100, 400)
         makePlanet(config.default_planets[i][0],config.default_planets[i][1],
         config.default_planets[i][2], 0, False, pos)
 
     for i in range(0,5):
-        pos = pg.Vector2(i*spacing + 100, 400)
+        pos = pg.Vector2(i*spacing + 100, 200)
         makePlanet(config.default_planets[i][0],config.default_planets[i][1],
         config.default_planets[i][2], 1, False, pos)

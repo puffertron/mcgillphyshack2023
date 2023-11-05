@@ -3,6 +3,8 @@ from typing import List
 from bodies import Planet
 from launcher import Launcher
 import assets
+import numpy as np
+import config
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -34,6 +36,9 @@ class State:
 
     #group for fx layers
     fxGroup: pg.sprite.Group = pg.sprite.Group()
+    fx1 = None
+    fx2 = None
+    fxSpecificPlayers = None #Will have two layers, 0 is for p0, 1 is for p1. This is NOT in fxGroup
 
     #group for bg
     bgGroup: pg.sprite.Group = pg.sprite.Group()
@@ -61,6 +66,9 @@ class State:
     
 
     assetbank = assets
+
+    #potential matrix for current planet configuration
+    potentialMatrix = np.zeros(shape=(config.playFieldWidth,config.playFieldHeight))
 
     def switchPlayer():
         #Does switch based on what inactive player was

@@ -1,4 +1,9 @@
 # Unlimited ORBattle Dynamics X^rd
+
+## Dependances
+- pygame
+- numpy
+
 ## TODO
 IMPORTANT:
 - Implement Art

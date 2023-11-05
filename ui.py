@@ -15,7 +15,10 @@ def makeButtons():
     #TODO Make buttons that look pretty
 
     #Make announcement bar
-    #TODO
+    # annBar = TextBox(pos=(10,10), size=(200,60), text="Welcome to the game!")
+    # State.announcementBar = annBar
+    # State.UIGroup.add(annBar)
+
 
 def startBegPlayerMovement(): #TEMP maybe? Not sure how to do starting stuff
     #Starts first player placement
@@ -76,8 +79,9 @@ def enterAimingMissileMode():
 
 def enterMissileSimulationMode():
     #Goes from aiming to simulating missile - when explodes calls next function
-    State.aimingMissileMode = False
-    State.missileLaunchedMode = True
+    if not State.crosshairs[State.activePlayer] == None:
+        State.aimingMissileMode = False
+        State.missileLaunchedMode = True
 
 def switchModeFromExplodingMissile():
     State.missileLaunchedMode = False
@@ -139,14 +143,23 @@ class Button(pg.sprite.Sprite):
 
 class TextBox(pg.sprite.Sprite):
     
-    def __init__(self, pos:pg.Vector2, text, textColor=pg.color.Color(255, 255, 255), backColor=pg.color.Color(255, 0, 0)):
+    def __init__(self, pos:pg.Vector2, size:pg.Vector2, text, textColor=pg.color.Color(0, 0, 0), backColor=pg.color.Color(255, 0, 0)):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.surface.Surface((60,20))
-        self.image.fill(color)
+        self.size = size
+        self.textColor = textColor
+        self.backColor = backColor
+        self.image = pg.surface.Surface(size)
+        self.image.fill(backColor)
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = pos.x, pos.y
-        self.callback = callback
         self.font = pg.freetype.SysFont(pg.freetype.get_default_font(), 12)
         self.text = text
         self.font.render_to(self.image, self.rect, self.text) #TODO - fix position of text
         self.mousedown = [0,0]
+    
+    def updateText(self, text):
+        self.text = text
+        fontimg, fontrect =self.font.render(self.text)
+        self.image.fill(self.backColor)
+        self.image.blit(fontimg, fontrect)
+    

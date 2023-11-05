@@ -226,7 +226,10 @@ class GameFuncs():
         print(cls.missile)
         # Define our Missile and group it
         if cls.missile == None:
-            cls.missile = Missile(config.missileRadius, Vector2(), Vector2())
+            print("missile was created!")
+            misInitPos = Vector2(State.launcher.rect.center)
+            misInitVel = Vector2(0, -config.defaultMissileVel*(-1**State.activePlayer)) #Opposite directio based on player (player on opposite side of board)
+            cls.missile = Missile(config.missileRadius, misInitPos, misInitVel)
             State.playerGroups[State.activePlayer].add(cls.missile)
             cls.launchedTime = time.time()
 
@@ -235,13 +238,29 @@ class GameFuncs():
             cls.missile.kill()
             cls.missile = None
 
-            State.movingPlanetsMode = True
-            State.missileLaunchedMode = False
-            State.switchPlayer()
+            # State.movingPlanetsMode = True
+            # State.missileLaunchedMode = False
+            # State.switchPlayer()
+            ui.switchModeFromExplodingMissile()
             return
 
         # Update Missile Position
         cls.missile.updateKinematics(State.planets)
+        
+        # Draw Trail
+        posHist = cls.missile.k.posHist
+        #if too short, use entire trail
+        if len(posHist) <= 50:
+            trail = posHist
+        else: #Trail is long so we should truncate it
+            trail = posHist[-50:]
+        
+        for i in range(1, len(trail)):
+            gfxdraw.line(State.fxSpecificPlayers.layers[State.activePlayer][0], int(trail[i-1].x), int(trail[i-1].y), int(trail[i].x), int(trail[i].y), (255, 255, 255))
+            
+        
+
+
 
         # Check if out of bounds
         bounds = pg.Rect(((config.windowWidth - config.playFieldWidth) / 2, (config.windowHeight - 2*config.playFieldHeight) / 2, config.playFieldWidth, 2*config.playFieldHeight))
@@ -262,9 +281,10 @@ class GameFuncs():
                 cls.missile.kill()
                 cls.missile = None
 
-                State.movingPlanetsMode = True
-                State.missileLaunchedMode = False
-                State.switchPlayer()
+                # State.movingPlanetsMode = True
+                # State.missileLaunchedMode = False
+                # State.switchPlayer()
+                ui.switchModeFromExplodingMissile()
                 return
 
             # x position of marker
@@ -298,7 +318,7 @@ class GameFuncs():
             if distSquared <= minDist**2:
                 print("switched due to collision")
                 #TODO collision stuff
-                if planet in State.planetGroups[State.inactivePlayer]:
+                if planet in State.planetGroups[State.inactivePlayer] and State.crosshairs[State.activePlayer].rect.collidepoint(cls.missile.rect.center):
                     planet.kill()
                     print("killed enemy planet! with radius " + str(planet.radius))
 
