@@ -23,11 +23,16 @@ def setupGameArea():
     #make ui
     ui.makeButtons()
 
+def setupBackgrounds():
+    bg = pg.sprite.Sprite(State.bgGroup)
+    bg.image = State.assetbank.BG_ART[0]
+    bg.image = pg.transform.smoothscale(bg.image, (config.windowWidth, config.windowHeight))
+    bg.rect = pg.Rect(0, 0, config.windowWidth, config.windowHeight)
 
-def makePlanet(radius, mass, color, owner: int, randpos=True, pos=None):
+def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
     """Makes a planet and adds to proper group, randomizes position inside player region"""
     #Make planet
-    newPlanet = Planet(radius,mass,color, owner)
+    newPlanet = Planet(radius,mass,typei, owner)
 
     #Add to groups
     State.planets.add(newPlanet)
@@ -46,25 +51,25 @@ def makePlanet(radius, mass, color, owner: int, randpos=True, pos=None):
 
     newPlanet.debugDisplay()
 
-def makePlanetsRandom():
-    makePlanet(30,100,pg.color.Color("green"), 0)
-    makePlanet(60,800,pg.color.Color("blue"), 0)
-    makePlanet(10,90,pg.color.Color("cyan"), 0)
-    makePlanet(16,500,pg.color.Color("indigo"), 0)
+# def makePlanetsRandom():
+#     makePlanet(30,100, 0)
+#     makePlanet(60,800,pg.color.Color("blue"), 0)
+#     makePlanet(10,90,pg.color.Color("cyan"), 0)
+#     makePlanet(16,500,pg.color.Color("indigo"), 0)
 
-    makePlanet(30,100,pg.color.Color("orange"), 1)
-    makePlanet(60,800,pg.color.Color("red"), 1)
-    makePlanet(10,90,pg.color.Color("yellow"), 1)
-    makePlanet(16,500,pg.color.Color("magenta"), 1)
+#     makePlanet(30,100,pg.color.Color("orange"), 1)
+#     makePlanet(60,800,pg.color.Color("red"), 1)
+#     makePlanet(10,90,pg.color.Color("yellow"), 1)
+#     makePlanet(16,500,pg.color.Color("magenta"), 1)
 
 def makePlanetsFixed(spacing):
 
     for i in range(0,5):
         pos = pg.Vector2(i*spacing + 100, 200)
         makePlanet(config.default_planets[i][0],config.default_planets[i][1],
-        pg.color.Color(config.p0colors[i]), 0, False, pos)
+        config.default_planets[i][2], 0, False, pos)
 
     for i in range(0,5):
         pos = pg.Vector2(i*spacing + 100, 400)
         makePlanet(config.default_planets[i][0],config.default_planets[i][1],
-        pg.color.Color(config.p1colors[i]), 1, False, pos)
+        config.default_planets[i][2], 1, False, pos)

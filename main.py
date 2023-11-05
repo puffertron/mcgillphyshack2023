@@ -12,14 +12,12 @@ clock = pg.time.Clock()
 running = True
 
 #setup scene
+setup.setupBackgrounds()
 setup.setupGameArea()
 
 #Make planets
 # setup.makePlanetsRandom()
 setup.makePlanetsFixed(40)
-
-#TEMP
-State.movingPlanetsMode = True
 
 
 while running:

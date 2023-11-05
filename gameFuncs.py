@@ -15,11 +15,12 @@ class GameFuncs():
 
 
     clickDifference: tuple
-    chosenPlanet: bodies.Planet = None
+    planetActivelyMoving:bool = False
+    # chosenPlanet: bodies.Planet = None   #Now in State
     @classmethod
     def movePlanet(cls):
         """Called when in Moving Planets Mode"""
-        if not cls.chosenPlanet:
+        if not State.chosenPlanet or not cls.planetActivelyMoving: #If haven't clicked on planet yet or let go of active planet, check if click on it
             #Check if starting to move planet
             if pg.mouse.get_pressed()[0]:
                 mousepos = pg.Vector2(pg.mouse.get_pos())
@@ -27,16 +28,22 @@ class GameFuncs():
                         (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
                         (mousepos.y - config.windowHeight / 2) * (-1)**(State.activePlayer) + config.windowHeight / 2
                     )
-            
-                for planet in State.planetGroups[State.activePlayer]:
+
+                if State.chosenPlanet == None:
+                    planetsToCheck = State.planetGroups[State.activePlayer] #Can click on any planet if none chosen yet
+                else:
+                    planetsToCheck = [State.chosenPlanet] #Can only click on chosen planet
+
+                for planet in planetsToCheck:
                     #For each planet, see if clicking on planet
                     positionInMask = flippedMousePos.x - planet.rect.x, flippedMousePos.y - planet.rect.y
                     if planet.rect.collidepoint(flippedMousePos) and planet.mask.get_at(positionInMask):
-                        cls.chosenPlanet = planet
-                        cls.clickDifference = (cls.chosenPlanet.rect.x - flippedMousePos.x, cls.chosenPlanet.rect.y - flippedMousePos.y)
+                        State.chosenPlanet = planet
+                        cls.planetActivelyMoving = True
+                        cls.clickDifference = (State.chosenPlanet.rect.x - flippedMousePos.x, State.chosenPlanet.rect.y - flippedMousePos.y)
                         break
 
-        else: #planet is chosen
+        else: #planet is chosen and moving
             mousepos = pg.Vector2(pg.mouse.get_pos())
             flippedMousePos = pg.Vector2(
                         (mousepos.x - config.windowWidth / 2) * (-1)**(State.activePlayer) + config.windowWidth / 2,
@@ -47,8 +54,8 @@ class GameFuncs():
             # targetx = mousepos.x + cls.clickDifference[0]
             # targety = mousepos.y + cls.clickDifference[1]
 
-            cls.chosenPlanet.rect.x = flippedMousePos.x + cls.clickDifference[0]
-            cls.chosenPlanet.rect.y = flippedMousePos.y + cls.clickDifference[1]
+            State.chosenPlanet.rect.x = flippedMousePos.x + cls.clickDifference[0]
+            State.chosenPlanet.rect.y = flippedMousePos.y + cls.clickDifference[1]
             
             #collision
             resolution = pg.Vector2()
@@ -56,26 +63,26 @@ class GameFuncs():
             bodyB = None
             bodyC = None
             for body in State.planetGroups[State.activePlayer]:
-                if body == cls.chosenPlanet: continue
-                if pg.sprite.collide_circle(cls.chosenPlanet, body):
-                    normal = pg.Vector2(body.rect.center) - pg.Vector2(cls.chosenPlanet.rect.center)
+                if body == State.chosenPlanet: continue
+                if pg.sprite.collide_circle(State.chosenPlanet, body):
+                    normal = pg.Vector2(body.rect.center) - pg.Vector2(State.chosenPlanet.rect.center)
                     collisions.append((body, normal))
-                    resolution = (int(normal.length()) - (body.radius + cls.chosenPlanet.radius))* normal.normalize()
+                    resolution = (int(normal.length()) - (body.radius + State.chosenPlanet.radius))* normal.normalize()
                     bodyB = body
                 
 
-            cls.chosenPlanet.rect.x += resolution.x
-            cls.chosenPlanet.rect.y += resolution.y
+            State.chosenPlanet.rect.x += resolution.x
+            State.chosenPlanet.rect.y += resolution.y
 
             #double collission failsafe!
             #check collisions again 
             for body in State.planetGroups[State.activePlayer]:
-                if body == cls.chosenPlanet or body == bodyB: continue
-                if pg.sprite.collide_circle(cls.chosenPlanet, body):
+                if body == State.chosenPlanet or body == bodyB: continue
+                if pg.sprite.collide_circle(State.chosenPlanet, body):
                     bodyC = body
                     #get nono zone venn radii
-                    radiusAB = cls.chosenPlanet.radius + bodyB.radius
-                    radiusAC = cls.chosenPlanet.radius + bodyC.radius
+                    radiusAB = State.chosenPlanet.radius + bodyB.radius
+                    radiusAC = State.chosenPlanet.radius + bodyC.radius
                     
                     #check intersection points
                     point1, point2 = intersectTwoCircles(bodyB.rect.centerx, bodyB.rect.centery, radiusAB, 
@@ -86,19 +93,21 @@ class GameFuncs():
 
                     #choose between the 2 points
                     if dist1.length() < dist2.length():
-                        cls.chosenPlanet.rect.centerx = point1.x
-                        cls.chosenPlanet.rect.centery = point1.y
+                        State.chosenPlanet.rect.centerx = point1.x
+                        State.chosenPlanet.rect.centery = point1.y
                         
                     if dist1.length() > dist2.length():
-                        cls.chosenPlanet.rect.centerx = point2.x
-                        cls.chosenPlanet.rect.centery = point2.y
+                        State.chosenPlanet.rect.centerx = point2.x
+                        State.chosenPlanet.rect.centery = point2.y
                         
-            cls.chosenPlanet.rect.clamp_ip(State.playrects[cls.chosenPlanet.owner])
+            State.chosenPlanet.rect.clamp_ip(State.playrects[State.chosenPlanet.owner])
 
             if not pg.mouse.get_pressed()[0]:
-                cls.chosenPlanet = None
-                State.movingPlanetsMode = False
+                cls.planetActivelyMoving = False
+                if State.startOfGameFreeMovement: #For free movement resets to allow any planet movement
+                    State.chosenPlanet = None
                 State.readyForBuffer = True
+                #TODO - could add processing and visualization of U equipotential lines here
 
     clickDifference: tuple
     movingLauncher: bool = False
