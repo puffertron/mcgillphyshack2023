@@ -100,28 +100,28 @@ class GameFuncs():
         cls.missile.updateKinematics(State.planets)
 
         # Check if collision
-        # for planet in State.planets:
-        #     distSquared = (cls.missile.rect.centerx - planet.rect.centerx)^2 + (cls.missile.rect.centery - planet.rect.centery)^2
-        #     minDist = (planet.radius + cls.missile.radius)
+        for planet in State.planets:
+            distSquared = (cls.missile.rect.centerx - planet.rect.centerx)**2 + (cls.missile.rect.centery - planet.rect.centery)**2
+            minDist = (planet.radius + cls.missile.radius)
 
-        #     if distSquared <= minDist^2:
+            if distSquared <= minDist**2:
         
-        #         #TODO collision stuff
-        #         if planet in State.planetGroups[State.inactivePlayer]:
-        #             planet.kill()
-        #             print("killed enemy planet! with radius " + str(planet.radius))
+                #TODO collision stuff
+                if planet in State.planetGroups[State.inactivePlayer]:
+                    planet.kill()
+                    print("killed enemy planet! with radius " + str(planet.radius))
                 
-        #         else:
-        #             print("hit an ally? with radius " + str(planet.radius))
-        #         print(planet.groups())
-        #         print(cls.missile.rect.center, planet.rect.center)
-        #         print(distSquared, str(minDist^2))
+                else:
+                    print("hit an ally? with radius " + str(planet.radius))
+                print(planet.groups())
+                print(cls.missile.rect.center, planet.rect.center)
+                print(distSquared, str(minDist**2))
 
-        #         cls.missile.kill()
-        #         cls.missile = None
+                cls.missile.kill()
+                cls.missile = None
 
-        #         State.switchPlayer()
-        #         break
+                State.switchPlayer()
+                break
 
                 
 
