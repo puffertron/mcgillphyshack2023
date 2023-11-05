@@ -95,7 +95,10 @@ class GameFuncs():
 
             if not pg.mouse.get_pressed()[0]:
                 cls.planetActivelyMoving = False
+                if State.startOfGameFreeMovement: #For free movement resets to allow any planet movement
+                    State.chosenPlanet = None
                 State.readyForBuffer = True
+                #TODO - could add processing and visualization of U equipotential lines here
 
     clickDifference: tuple
     movingLauncher: bool = False

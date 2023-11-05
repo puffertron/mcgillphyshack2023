@@ -47,6 +47,7 @@ class State:
     
     #Some vars for specific game states
     chosenPlanet:Planet = None #Set when moving, set to none at start of moving phase
+    startOfGameFreeMovement = True #Allows free movement of all planets on side (not locked to one planet) for start of game
     
 
     def switchPlayer():
