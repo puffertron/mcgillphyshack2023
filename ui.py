@@ -116,7 +116,7 @@ class Button(pg.sprite.Sprite):
         self.font = pg.freetype.SysFont(pg.freetype.get_default_font(), 12)
         self.text = text
         fontimg, fontrect =self.font.render(self.text)
-        #self.image.blit(fontimg, fontrect) 
+        self.image.blit(fontimg, fontrect) 
         self.mousedown = [0,0]
     
     def onclick(self):
