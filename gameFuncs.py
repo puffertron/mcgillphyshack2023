@@ -67,6 +67,7 @@ class GameFuncs():
                 if pg.sprite.collide_circle(State.chosenPlanet, body):
                     normal = pg.Vector2(body.rect.center) - pg.Vector2(State.chosenPlanet.rect.center)
                     collisions.append((body, normal))
+                    # if normal.length():
                     resolution = (int(normal.length()) - (body.radius + State.chosenPlanet.radius))* normal.normalize()
                     bodyB = body
                 
