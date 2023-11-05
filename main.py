@@ -39,7 +39,7 @@ while running:
             running = False
         elif event.type == pg.KEYDOWN:
                 if event.unicode == "a":
-                    State.currentPlayer = int(not bool(State.currentPlayer))
+                    State.switchPlayer()
                 elif event.unicode == "s":
                     State.movingPlanetsMode = False
                     State.missileLaunchedMode = True
@@ -59,19 +59,14 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
+
     # RENDER YOUR GAME HERE
-    
     bgGroup.draw(screen)
 
-    if State.currentPlayer == 0:
-        State.p0Group.update(screen) #Doing nothing right now?
-        State.p0Group.draw(screen)
-    elif State.currentPlayer == 1:
-        State.p1Group.update(screen) #Doing nothing right now?
-        State.p1Group.draw(screen)
-    elif None:
-        pass #TODO Can show passing game screen
-    
+    State.playerGroups[State.activePlayer].update(screen)
+    State.playerGroups[State.activePlayer].draw(screen)
+    #TODO Can show passing game screen
+   
     # flip() the display to put your work on screen
     pg.display.flip()
 
