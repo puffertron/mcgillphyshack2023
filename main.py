@@ -12,6 +12,7 @@ clock = pg.time.Clock()
 running = True
 
 #setup scene
+setup.setupBackgrounds()
 setup.setupGameArea()
 
 #Make planets

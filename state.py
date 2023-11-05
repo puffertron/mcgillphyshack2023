@@ -2,6 +2,7 @@ import pygame as pg
 from typing import List
 from bodies import Planet
 from launcher import Launcher
+import assets
 
 class State:
     """Holds all state of game, imported by most files, state edited through functions"""
@@ -49,6 +50,8 @@ class State:
     chosenPlanet:Planet = None #Set when moving, set to none at start of moving phase
     startOfGameFreeMovement = True #Allows free movement of all planets on side (not locked to one planet) for start of game
     
+
+    assetbank = assets
 
     def switchPlayer():
         #Does switch based on what inactive player was
