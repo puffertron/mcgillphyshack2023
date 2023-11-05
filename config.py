@@ -22,6 +22,7 @@ launcherRadius = 10 # drawn launcher object radius
 arrowAreaRadius = 100 # area from launcher that the arrow is allowed to go
 arrowheadRadius = 5
 
+defaultMissileVel = 5 #Might not be used
 
 crosshairRadius = 15
 

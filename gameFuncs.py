@@ -188,7 +188,9 @@ class GameFuncs():
         print(cls.missile)
         # Define our Missile and group it
         if cls.missile == None:
-            cls.missile = Missile(config.missileRadius, Vector2(), Vector2())
+            misInitPos = Vector2(State.launcher.rect.center)
+            misInitVel = Vector2(0, -config.defaultMissileVel*(-1**State.activePlayer)) #Opposite directio based on player (player on opposite side of board)
+            cls.missile = Missile(config.missileRadius, misInitPos, misInitVel)
             State.playerGroups[State.activePlayer].add(cls.missile)
             cls.launchedTime = time.time()
 
