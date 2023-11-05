@@ -42,12 +42,36 @@ def setupBackgrounds():
     bgdust.image.set_alpha(50)
     bgdust.mask = State.assetbank.BG_ART[4]
     bgdust.scrolltexture = State.assetbank.BG_ART[3]
-    bgdust.scrollspeed = -1
+    bgdust.scrollspeed = (-1,1)
 
-    State.bgGroup.add(bgborder, bgdust)
 
     #asteroids
-    asteroids = effects.ScrollSprite()
+    # asteroids1 = effects.ScrollSprite()
+    # asteroids1.image = pg.Surface((config.windowWidth, config.windowHeight))
+    # asteroids1.scrolltexture = pg.Surface((config.windowWidth, config.windowHeight))
+    # asteroids1.scrolltexture.fill((0,0,0))
+    # asteroids1.scrolltexture.blit(State.assetbank.ASS[0], asteroids1.scrolltexture.get_rect())
+    # asteroids1.scrolltexture = State.assetbank.ASS[0]
+    # asteroids1.mask = pg.Surface((config.windowWidth, config.windowHeight))
+    # asteroids1.mask.fill((255,255,255))
+    # asteroids1.scrollspeed=(1,0)
+
+    asteroids = pg.sprite.Sprite()
+    asteroids.image = State.assetbank.ASS[0]
+    asteroids.image = pg.transform.smoothscale(asteroids.image, (config.windowWidth, config.windowHeight))
+    asteroids.rect = asteroids.image.get_rect()
+    asteroids.image.set_colorkey((0,0,0))
+
+    asteroids1 = effects.ScrollSprite()
+    asteroids1.image = pg.Surface((config.windowWidth, config.windowHeight))
+    asteroids1.scrolltexture = State.assetbank.ASS[1]
+    asteroids1.mask = pg.Surface((config.windowWidth, config.windowHeight))
+    asteroids1.mask.fill((255,255,255))
+    asteroids1.scrollspeed=(1,0)
+
+    State.bgGroup.add(bgborder, bgdust)
+    State.fxGroup.add(asteroids, asteroids1)
+
 
 def setupEffects():
     fx1 = effects.GlobalEffects()
@@ -60,6 +84,7 @@ def setupEffects():
     State.fx1 = fx1
     State.fx2 = fx2
     State.fxSpecificPlayers = fxSpecificPlayers
+
 
 def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
     """Makes a planet and adds to proper group, randomizes position inside player region"""

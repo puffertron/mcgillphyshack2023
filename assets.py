@@ -21,3 +21,8 @@ UI_ELEMENTS = [
     pg.image.load("assets/ui/hack23-textbox-idle.png"),
     pg.image.load("assets/ui/hack23-playarea-border.png")
 ]
+
+ASS = [
+    pg.image.load("assets/asteroid/hack23-asteriodbelt-back.png"),
+    pg.image.load("assets/asteroid/hack23-asteriodbelt-front.png")
+]

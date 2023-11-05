@@ -69,7 +69,7 @@ class GameArea(pg.sprite.DirtySprite):
 
 
 class ScrollSprite(pg.sprite.DirtySprite):
-    def __init__(self, speed=2):
+    def __init__(self, speed=(2,2)):
         pg.sprite.DirtySprite.__init__(self)
         self.scrolltexture: pg.Surface
         self.scrollspeed = speed
@@ -80,7 +80,7 @@ class ScrollSprite(pg.sprite.DirtySprite):
         self.image.fill((0,0,0))
         self.image.set_colorkey((0,0,0))
 
-        realScroll(self.scrolltexture, self.scrollspeed, -self.scrollspeed)
+        realScroll(self.scrolltexture, self.scrollspeed[0], -self.scrollspeed[1])
         self.scrolltexture = pg.transform.smoothscale(self.scrolltexture, (config.windowWidth, config.windowHeight))
         r = self.image.get_rect()
         blit_mask(self.scrolltexture, self.image, r, self.mask, self.image.get_rect())
