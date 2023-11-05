@@ -53,6 +53,9 @@ class State:
 
     assetbank = assets
 
+    #potential matrix for current planet configuration
+    potentialMatrix = None #TODO - what is type
+
     def switchPlayer():
         #Does switch based on what inactive player was
         State.activePlayer = State.inactivePlayer

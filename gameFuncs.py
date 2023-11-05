@@ -146,9 +146,10 @@ class GameFuncs():
             cls.missile.kill()
             cls.missile = None
 
-            State.movingPlanetsMode = True
-            State.missileLaunchedMode = False
-            State.switchPlayer()
+            # State.movingPlanetsMode = True
+            # State.missileLaunchedMode = False
+            # State.switchPlayer()
+            ui.switchModeFromExplodingMissile()
             return
 
         # Update Missile Position
@@ -173,9 +174,10 @@ class GameFuncs():
                 cls.missile.kill()
                 cls.missile = None
 
-                State.movingPlanetsMode = True
-                State.missileLaunchedMode = False
-                State.switchPlayer()
+                # State.movingPlanetsMode = True
+                # State.missileLaunchedMode = False
+                # State.switchPlayer()
+                ui.switchModeFromExplodingMissile()
                 return
 
             # x position of marker
