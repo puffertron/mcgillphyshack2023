@@ -1,7 +1,8 @@
 import pygame as pg
-import effects, config
+import effects, config, ui
 from bodies import Planet
 from state import State
+
 
 
 def setupGameArea():
@@ -18,6 +19,10 @@ def setupGameArea():
     player1Area.rect.y = player1Area.rect.height + config.topOfPlayField
 
     State.playrects = [player0Area.rect, player1Area.rect]
+
+    #make ui
+    ui.makeButtons()
+
 
 def makePlanet(radius, mass, color, owner: int, randpos=True, pos=None):
     """Makes a planet and adds to proper group, randomizes position inside player region"""

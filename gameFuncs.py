@@ -6,6 +6,7 @@ from launcher import Launcher
 from state import State
 import config
 import math
+import ui
 
 class GameFuncs():
     """Funcs for different game modes, func will be called each frame"""
@@ -87,7 +88,7 @@ class GameFuncs():
             if not pg.mouse.get_pressed()[0]:
                 cls.chosenPlanet = None
                 State.movingPlanetsMode = False
-                State.missileLaunchedMode = True
+                State.readyForBuffer = True
 
     clickDifference: tuple
     movingLauncher: bool = False
@@ -115,6 +116,8 @@ class GameFuncs():
     @classmethod
     def missileLaunched(cls):
         """Called when in Shooting mode"""
+        #TODO - make launcher here and add to group if just started
+        #TODO - destroy
 
         # Define our Missile and group it
         if cls.missile == None:
@@ -145,9 +148,10 @@ class GameFuncs():
                 cls.missile.kill()
                 cls.missile = None
 
-                State.movingPlanetsMode = True
-                State.missileLaunchedMode = False
-                State.switchPlayer()
+                # State.movingPlanetsMode = True
+                # State.missileLaunchedMode = False
+                # State.switchPlayer()
+                ui.switchModeFromExplodingMissile()
                 break
 
                 

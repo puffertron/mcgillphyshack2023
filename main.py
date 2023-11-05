@@ -68,6 +68,10 @@ while running:
     State.playerGroups[State.activePlayer].update(screen)
     State.playerGroups[State.activePlayer].draw(screen)
 
+    #draw UI
+    State.UIGroup.update()
+    State.UIGroup.draw(screen)
+
     #draw fx layers
     State.fxGroup.update()
     State.fxGroup.draw(screen)
