@@ -37,6 +37,7 @@ class State:
     fxGroup: pg.sprite.Group = pg.sprite.Group()
     fx1 = None
     fx2 = None
+    fxSpecificPlayers = None #Will have two layers, 0 is for p0, 1 is for p1. This is NOT in fxGroup
 
     #group for bg
     bgGroup: pg.sprite.Group = pg.sprite.Group()

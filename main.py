@@ -14,10 +14,15 @@ running = True
 #setup scene
 setup.setupBackgrounds()
 setup.setupGameArea()
+setup.setupEffects()
 
 #Make planets
 # setup.makePlanetsRandom()
 setup.makePlanetsFixed(40)
+
+tester = pg.sprite.Sprite()
+tester.image = pg.Surface((50,50))
+tester.image.fill((255,0,0))
 
 
 while running:
@@ -73,9 +78,12 @@ while running:
         State.launchGroups[State.activePlayer].update()
         State.launchGroups[State.activePlayer].draw(canvas)
 
+    tester.image.blit(State.fxSpecificPlayers.layers[0][0], tester.image.get_rect())
+
     #draw fx layers
     State.fxGroup.update()
     State.fxGroup.draw(canvas)
+
 
     if State.activePlayer == 1:
         canvas = pg.transform.rotate(canvas, 180)

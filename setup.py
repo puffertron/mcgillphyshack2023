@@ -52,9 +52,14 @@ def setupBackgrounds():
 def setupEffects():
     fx1 = effects.GlobalEffects()
     fx2 = effects.GlobalEffects()
-    State.fxGroup.add(fx1, fx2)
+    fxSpecificPlayers = effects.GlobalEffects()
+    fxSpecificPlayers.newlayer()
+    State.fxGroup.add(fx1)
+    State.fxGroup.add(fx2)
+    State.fxGroup.add(fxSpecificPlayers)
     State.fx1 = fx1
     State.fx2 = fx2
+    State.fxSpecificPlayers = fxSpecificPlayers
 
 def makePlanet(radius, mass, typei, owner: int, randpos=True, pos=None):
     """Makes a planet and adds to proper group, randomizes position inside player region"""

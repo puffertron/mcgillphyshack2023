@@ -14,7 +14,13 @@ def makePotentialMatrix():
         #Get coords of planet for matrix coords
         planetx = planet.rect.center[0]
         planety = planet.rect.center[1]
-
+        
+        #go over planets
         # for pixxpos in range(TODO):
         #     for pixypos in range
+
+def differentialMatrix():
+    #Uses current matrix, old planet position, new planet position to recalculate matrix
+    pass
+    #Not priority
         

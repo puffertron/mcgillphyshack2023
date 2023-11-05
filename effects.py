@@ -85,24 +85,29 @@ class ScrollSprite(pg.sprite.DirtySprite):
 
 class GlobalEffects(pg.sprite.DirtySprite):
     def __init__(self, blendmode=0):
-        pg.sprite.DirtySprite().__init__(self)
+        pg.sprite.DirtySprite.__init__(self)
         self.blendmode = blendmode
         self.image = pg.Surface((config.windowWidth, config.windowHeight))
         self.rect = self.image.get_rect()
-        self.layers = []
-        self.layers.append(pg.Surface((config.windowWidth, config.windowHeight)))
+        self.image.set_colorkey((0,0,0))
+        self.layers = [] #List of 2-tuples, first element is Surface, second is bool of whether to draw each fram or not
+        self.layers.append((pg.Surface((config.windowWidth, config.windowHeight)), True))
     
     def composite(self):
         for layer in self.layers:
-            self.image.blit(self.layers[i], self.rect)
+            layer[0].set_colorkey((0,0,0))
+            if layer[1]:
+                self.image.blit(layer[0], self.rect)
     
     def newlayer(self):
-        new = pg.Surface((config.windowWidth, config.windowHeight))
+        new = (pg.Surface((config.windowWidth, config.windowHeight)),True)
         self.layers.append(new)
         return new
     
     def update(self):
         for layer in self.layers:
-            layer.fill((0,0,0))
-            layer.set_colorkey((0,0,0))
+            layer[0].fill((0,0,0))
+            layer[0].set_colorkey((0,0,0))
+        
+        self.composite()
 
