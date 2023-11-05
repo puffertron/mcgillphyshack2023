@@ -80,6 +80,8 @@ class GameFuncs():
                     if dist1.length() > dist2.length():
                         cls.chosenPlanet.rect.centerx = point2.x
                         cls.chosenPlanet.rect.centery = point2.y
+                        
+            cls.chosenPlanet.rect.clamp_ip(State.playrects[cls.chosenPlanet.owner])
 
             if not pg.mouse.get_pressed()[0]:
                 cls.chosenPlanet = None
