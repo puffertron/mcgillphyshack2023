@@ -107,6 +107,8 @@ class Button(pg.sprite.Sprite):
     def __init__(self, callback, pos:pg.Vector2, text, color=pg.color.Color(155, 155, 155)):
         pg.sprite.Sprite.__init__(self)
         self.image = pg.surface.Surface((100,20))
+        # self.image = State.assetbank.UI_ELEMENTS[0]
+        # self.image = 
         self.color = color
         self.image.fill(self.color)
         self.rect = pg.Rect(pos.x, pos.y, self.image.get_width(), self.image.get_height())
