@@ -4,6 +4,7 @@ from state import State
 import bodies, missile, effects, setup, config
 from launcher import Launcher
 from pygame import freetype, color
+import config
 
 pg.init()
 screen = pg.display.set_mode((config.windowWidth, config.windowHeight))
@@ -16,7 +17,6 @@ setup.setupGameArea()
 #Make planets
 # setup.makePlanetsRandom()
 setup.makePlanetsFixed(40)
-
 
 #TEMP
 State.movingPlanetsMode = True
@@ -67,6 +67,10 @@ while running:
 
     State.playerGroups[State.activePlayer].update(screen)
     State.playerGroups[State.activePlayer].draw(screen)
+
+    #draw UI
+    State.UIGroup.update()
+    State.UIGroup.draw(screen)
 
     #draw fx layers
     State.fxGroup.update()

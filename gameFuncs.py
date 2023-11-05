@@ -6,6 +6,8 @@ from launcher import Launcher
 from state import State
 import config
 import math
+import ui
+import time
 
 class GameFuncs():
     """Funcs for different game modes, func will be called each frame"""
@@ -87,7 +89,7 @@ class GameFuncs():
             if not pg.mouse.get_pressed()[0]:
                 cls.chosenPlanet = None
                 State.movingPlanetsMode = False
-                State.missileLaunchedMode = True
+                State.readyForBuffer = True
 
     clickDifference: tuple
     movingLauncher: bool = False
@@ -113,36 +115,51 @@ class GameFuncs():
 
         State.launcher.rect.clamp_ip(pg.Rect(config.windowWidth/2-config.playFieldWidth/2, State.launcher.rect.centery, config.playFieldWidth, 0))
 
+    marker: pg.sprite.Sprite = None
     missile: Missile = None
+    leftBoundsTime = 0
+    launchedTime = 0
     @classmethod
     def missileLaunched(cls):
         """Called when in Shooting mode"""
+        #TODO - make launcher here and add to group if just started
+        #TODO - destroy
 
+        print(cls.missile)
         # Define our Missile and group it
         if cls.missile == None:
             cls.missile = Missile(config.missileRadius, Vector2(), Vector2())
             State.playerGroups[State.activePlayer].add(cls.missile)
+            cls.launchedTime = time.time()
+
+        if time.time() - cls.launchedTime > 20:
+            print("switched due to timeout")
+            cls.missile.kill()
+            cls.missile = None
+
+            State.movingPlanetsMode = True
+            State.missileLaunchedMode = False
+            State.switchPlayer()
+            return
 
         # Update Missile Position
         cls.missile.updateKinematics(State.planets)
 
-        # Check if collision
-        for planet in State.planets:
-            distSquared = (cls.missile.rect.centerx - planet.rect.centerx)**2 + (cls.missile.rect.centery - planet.rect.centery)**2
-            minDist = (planet.radius + cls.missile.radius)
+        # Check if out of bounds
+        bounds = pg.Rect(((config.windowWidth - config.playFieldWidth) / 2, (config.windowHeight - 2*config.playFieldHeight) / 2, config.playFieldWidth, 2*config.playFieldHeight))
+        if not bounds.collidepoint(cls.missile.rect.center):
+            if cls.marker == None:
+                cls.marker = pg.sprite.Sprite(State.playerGroups[State.activePlayer])
+                cls.marker.image = pg.Surface((config.markerSize, config.markerSize))
+                cls.marker.image.fill("white")
+                cls.marker.rect = cls.marker.image.get_rect()
 
-            if distSquared <= minDist**2:
-        
-                #TODO collision stuff
-                if planet in State.planetGroups[State.inactivePlayer]:
-                    planet.kill()
-                    print("killed enemy planet! with radius " + str(planet.radius))
-                
-                else:
-                    print("hit an ally? with radius " + str(planet.radius))
-                print(planet.groups())
-                print(cls.missile.rect.center, planet.rect.center)
-                print(distSquared, str(minDist**2))
+                cls.leftBoundsTime = time.time()
+
+            if time.time() - cls.leftBoundsTime > 5:
+                print("switched due to out of bounds")
+                cls.marker.kill()
+                cls.marker = None
 
                 cls.missile.kill()
                 cls.missile = None
@@ -150,6 +167,50 @@ class GameFuncs():
                 State.movingPlanetsMode = True
                 State.missileLaunchedMode = False
                 State.switchPlayer()
+                return
+
+            # x position of marker
+            if (bounds.left <= cls.missile.rect.centerx and cls.missile.rect.centerx <= bounds.right):
+                marker_x = cls.missile.rect.centerx - config.markerSize / 2
+            else:
+                x_direction = (bounds.left - cls.missile.rect.centerx) / abs(bounds.left - cls.missile.rect.centerx)
+                marker_x = bounds.centerx - (bounds.width / 2) * x_direction - config.markerSize / 2
+
+            # y position of marker
+            if (bounds.top <= cls.missile.rect.centery and cls.missile.rect.centery <= bounds.bottom):
+                marker_y = cls.missile.rect.centery - config.markerSize / 2
+            else:
+                y_direction = (bounds.left - cls.missile.rect.centery) / abs(bounds.left - cls.missile.rect.centery)
+                marker_y = bounds.centery - (bounds.height / 2) * y_direction - config.markerSize / 2
+
+            # set marker position
+            cls.marker.rect.x = marker_x
+            cls.marker.rect.y = marker_y
+
+        elif not cls.marker == None:
+            cls.marker.kill()
+            cls.marker = None
+
+
+        # Check if collision
+        for planet in State.planets:
+            distSquared = (cls.missile.rect.centerx - planet.rect.centerx)**2 + (cls.missile.rect.centery - planet.rect.centery)**2
+            minDist = (planet.radius + cls.missile.radius)
+
+            if distSquared <= minDist**2:
+                print("switched due to collision")
+                #TODO collision stuff
+                if planet in State.planetGroups[State.inactivePlayer]:
+                    planet.kill()
+                    print("killed enemy planet! with radius " + str(planet.radius))
+
+                cls.missile.kill()
+                cls.missile = None
+
+                # State.movingPlanetsMode = True
+                # State.missileLaunchedMode = False
+                # State.switchPlayer()
+                ui.switchModeFromExplodingMissile()
                 break
 
                 
