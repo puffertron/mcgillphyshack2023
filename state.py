@@ -35,6 +35,8 @@ class State:
 
     #group for fx layers
     fxGroup: pg.sprite.Group = pg.sprite.Group()
+    fx1 = None
+    fx2 = None
 
     #group for bg
     bgGroup: pg.sprite.Group = pg.sprite.Group()
