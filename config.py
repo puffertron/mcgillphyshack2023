@@ -11,7 +11,7 @@ playFieldHeight = 300
 topOfPlayField = 50
 leftOfPlayField = 100
 
-gravity = -1
+gravity = -3
 
 missileRadius = 5
 markerSize = 6
@@ -22,7 +22,7 @@ launcherRadius = 10 # drawn launcher object radius
 arrowAreaRadius = 100 # area from launcher that the arrow is allowed to go
 arrowheadRadius = 5
 
-defaultMissileVel = 5 #Might not be used
+defaultMissileVel = 5 #Might not be used later
 
 crosshairRadius = 15
 
