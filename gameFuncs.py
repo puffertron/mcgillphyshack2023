@@ -188,6 +188,7 @@ class GameFuncs():
         print(cls.missile)
         # Define our Missile and group it
         if cls.missile == None:
+            print("missile was created!")
             misInitPos = Vector2(State.launcher.rect.center)
             misInitVel = Vector2(0, -config.defaultMissileVel*(-1**State.activePlayer)) #Opposite directio based on player (player on opposite side of board)
             cls.missile = Missile(config.missileRadius, misInitPos, misInitVel)
