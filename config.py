@@ -29,11 +29,11 @@ crosshairRadius = 15
 
 # Default Planet Attributes - tuples of (radius, mass, type)
 default_planets = [
-    (10, 800, 3),  # neutron star - tiny radius, large mass     - NEUTRON STAR      - white
-    (50, 90, 1), # gas giant - large radius, tiny mass        - gassy, large      - pinkish
-    (20, 150, 4), # terrestrial - medium radius, medium mass   - cratery, medium   - greeny
-    (30, 120, 2), # mini-neptune - medium radius, medium mass  - gassy, medium     - blue/purple
-    (15, 40, 0)   # dwarf - small radius, small mass           - cratery, small    - purpley grey
+    (10, 1500, 3),  # neutron star - tiny radius, large mass     - NEUTRON STAR      - white
+    (50, 180, 1), # gas giant - large radius, tiny mass        - gassy, large      - pinkish
+    (20, 300, 4), # terrestrial - medium radius, medium mass   - cratery, medium   - greeny
+    (30, 240, 2), # mini-neptune - medium radius, medium mass  - gassy, medium     - blue/purple
+    (15, 80, 0)   # dwarf - small radius, small mass           - cratery, small    - purpley grey
 ]
 
 
