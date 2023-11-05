@@ -60,21 +60,33 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("black")
 
+    # create drawing surface
+    canvas = pg.Surface(screen.get_size())
 
     # RENDER YOUR GAME HERE
     State.bgGroup.update()
-    State.bgGroup.draw(screen)
+    State.bgGroup.draw(canvas)
 
-    State.playerGroups[State.activePlayer].update(screen)
-    State.playerGroups[State.activePlayer].draw(screen)
+    State.playerGroups[State.activePlayer].update(canvas)
+    State.playerGroups[State.activePlayer].draw(canvas)
+
+    #draw launch stuff
+    if State.aimingMissileMode == True or State.missileLaunchedMode == True:
+        State.launchGroups[State.activePlayer].update()
+        State.launchGroups[State.activePlayer].draw(canvas)
+
+    #draw fx layers
+    State.fxGroup.update()
+    State.fxGroup.draw(canvas)
+
+    if State.activePlayer == 1:
+        canvas = pg.transform.rotate(canvas, 180)
+
+    screen.blit(canvas, screen.get_rect())
 
     #draw UI
     State.UIGroup.update()
     State.UIGroup.draw(screen)
-
-    #draw fx layers
-    State.fxGroup.update()
-    State.fxGroup.draw(screen)
 
     #TODO Can show passing game screen
    

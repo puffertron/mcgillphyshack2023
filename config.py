@@ -20,6 +20,8 @@ yposLauncher = 10
 launchArrowRadius = 100
 launchVelocityMod = 10
 
+crosshairRadius = 15
+
 # Default Planet Attributes - tuples of (radius, mass)
 default_planets = [
     (5, 800),  # neutron star - tiny radius, large mass     - NEUTRON STAR      - white
