@@ -18,7 +18,11 @@ class State:
     planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p0Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
     p1Planets: 'pg.sprite.Group[Planet]' = pg.sprite.Group()
+    p0LaunchGroup = pg.sprite.Group()
+    p1LaunchGroup = pg.sprite.Group()
     launcher: Launcher = None
+    p0crosshair: pg.sprite.Sprite = None
+    p1crosshair: pg.sprite.Sprite = None
     p0Group: pg.sprite.Group = pg.sprite.Group()
     p1Group: pg.sprite.Group = pg.sprite.Group()
     passGroup: pg.sprite.Group = pg.sprite.Group()
@@ -35,11 +39,14 @@ class State:
     #group for bg
     bgGroup: pg.sprite.Group = pg.sprite.Group()
 
-    playrects = []
+    playrects: list[pg.Rect] = []
 
+    launchGroups = [p0LaunchGroup, p1LaunchGroup]
     playerGroups = [p0Group, p1Group, passGroup]
     planetGroups = [p0Planets, p1Planets]
-    
+    crosshairs = [p0crosshair, p1crosshair]
+
+
     #Different game states
     movingPlanetsMode = False
     chosenPlanet = None
